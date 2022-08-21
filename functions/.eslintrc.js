@@ -27,5 +27,7 @@ module.exports = {
   rules: {
     "quotes": ["error", "double"],
     "import/no-unresolved": 0,
+    "object-curly-spacing": [2, "always"],
+    "new-cap": ["error", { "capIsNewExceptionPattern": "^express\\.." }],
   },
 };

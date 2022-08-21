@@ -6,7 +6,10 @@
     "outDir": "lib",
     "sourceMap": true,
     "strict": true,
-    "target": "es2017"
+    "target": "es2017",
+    // https://bobbyhadz.com/blog/typescript-module-can-only-be-default-imported-esmoduleinterop
+    // https://www.typescriptlang.org/tsconfig#allowSyntheticDefaultImports
+    "esModuleInterop": true
   },
   "compileOnSave": true,
   "include": [
