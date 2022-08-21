@@ -16,8 +16,9 @@ onFleetRouter.get(
             tasks.map((task) => task.id)
         );
 
-        // TODO: save only when tasks are not empty
-        await insertTasks(tasks);
+        if (tasks.length > 0) {
+          await insertTasks(tasks);
+        }
 
         res.status(200).json(tasks);
       } catch (e) {
