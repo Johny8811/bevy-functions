@@ -1,9 +1,21 @@
-import * as functions from "firebase-functions";
+import { https, logger } from "firebase-functions";
+import "dotenv/config";
+import express from "express";
+import cors from "cors";
+import helmet from "helmet";
 
-// Start writing Firebase Functions
-// https://firebase.google.com/docs/functions/typescript
+import { onFleetRouter } from "./routers/onfleet";
 
-export const helloWorld = functions.https.onRequest((request, response) => {
-  functions.logger.info("Hello logs!", {structuredData: true});
-  response.send("Hello from Firebase!");
+const app = express();
+app.use(helmet());
+app.use(cors({ origin: true }));
+app.use(express.json());
+
+app.get("/", (req, res) => {
+  logger.log("Server is running.");
+  res.send("Server is running.");
 });
+
+app.use("/tasks", onFleetRouter);
+
+export const onFleet = https.onRequest(app);
