@@ -12,7 +12,7 @@ export const insertTasks = (tasks: OnfleetTask[]) => tasksCollection.insertMany(
     { ordered: true }
 );
 
-export const getAllTasks = ({
+export const getTasksByDate = ({
   from,
   completeAfterAfter,
   completeBeforeBefore,

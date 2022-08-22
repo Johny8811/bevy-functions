@@ -4,7 +4,7 @@ import * as express from "express";
 import { getAllTasks as onFleetGetAllTasks } from "../../integrations/onFleet/getAllTasks";
 import { getNextDayTimeValues } from "../utils";
 
-import { insertTasks, getAllTasks } from "./db";
+import { insertTasks, getTasksByDate } from "./db";
 
 export const onFleetRouter = express.Router();
 
@@ -41,7 +41,7 @@ onFleetRouter.get(
 onFleetRouter.get("/nextDay", async (req, res) => {
   try {
     const timeValues = getNextDayTimeValues();
-    const tasks = await getAllTasks(timeValues);
+    const tasks = await getTasksByDate(timeValues);
 
     logger.log(
         "/export/saveToDb - Prepared tasks ids for next day: ",
