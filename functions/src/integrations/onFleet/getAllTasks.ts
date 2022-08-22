@@ -22,7 +22,7 @@ export const getAllTasks = async (params: TaskQueryParam) => {
     const { tasks, lastId: currentLastId } = await onFleetApi.tasks.get(innerParams);
     allTasks = [...allTasks, ...tasks];
 
-    logger.log(`getAllTasks:iteration ${allTasks.length}, iteration: ${iteration}`);
+    logger.log(`getAllTasks - iteration ${allTasks.length}, iteration: ${iteration}`);
 
     if (currentLastId && iteration <= iterationLimit ) {
       iteration++;

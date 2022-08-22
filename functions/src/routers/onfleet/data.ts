@@ -1,4 +1,4 @@
-import { onFleetApi } from "../../integrations/onFleet";
+import { getAllTasks } from "../../integrations/onFleet/getAllTasks";
 import { getTime, set, add } from "date-fns";
 import { logger } from "firebase-functions";
 
@@ -11,13 +11,13 @@ export const getTasksForNextDay = () => {
   const completeAfterAfter = getTime(add(createdFrom, { days: 1 }));
   const completeBeforeBefore = getTime(add(createdFrom, { days: 2 }));
 
-  logger.log("Get tasks times: ", {
+  logger.log("getTasksForNextDay - Get tasks times: ", {
     createdFrom,
     completeAfterAfter,
     completeBeforeBefore,
   });
 
-  return onFleetApi.tasks.get({
+  return getAllTasks({
     from: createdFrom,
     completeAfterAfter,
     completeBeforeBefore,

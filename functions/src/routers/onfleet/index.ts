@@ -10,7 +10,7 @@ onFleetRouter.get(
     "/export/saveToDb",
     async (req, res) => {
       try {
-        const { tasks } = await getTasksForNextDay();
+        const tasks = await getTasksForNextDay();
         logger.log(
             "Prepared tasks ids for next day: ",
             tasks.map((task) => task.id)
