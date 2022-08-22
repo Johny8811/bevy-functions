@@ -38,7 +38,7 @@ onFleetRouter.get(
     },
 );
 
-onFleetRouter.get("/all/nextDay", async (req, res) => {
+onFleetRouter.get("/nextDay", async (req, res) => {
   try {
     const timeValues = getNextDayTimeValues();
     const tasks = await getAllTasks(timeValues);
