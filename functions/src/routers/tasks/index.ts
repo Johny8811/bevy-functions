@@ -9,7 +9,7 @@ import { insertTasks, getTasksByDate, getTasksByDateAndUserId } from "./db";
 export const tasksRouter = express.Router();
 
 tasksRouter.get(
-    "onFleet/export/saveToDb",
+    "/onFleet/export/saveToDb",
     async (req, res) => {
       try {
         const timeValues = getNextDayTimeValues();
