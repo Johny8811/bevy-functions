@@ -6,9 +6,9 @@ import { getNextDayTimeValues } from "../utils";
 
 import { insertTasks, getTasksByDate, getTasksByDateAndUserId } from "./db";
 
-export const onFleetRouter = express.Router();
+export const tasksRouter = express.Router();
 
-onFleetRouter.get(
+tasksRouter.get(
     "onFleet/export/saveToDb",
     async (req, res) => {
       try {
@@ -38,7 +38,7 @@ onFleetRouter.get(
     },
 );
 
-onFleetRouter.get("/nextDay", async (req, res) => {
+tasksRouter.get("/nextDay", async (req, res) => {
   try {
     const timeValues = getNextDayTimeValues();
     const tasks = await getTasksByDate(timeValues);
@@ -69,7 +69,7 @@ onFleetRouter.get("/nextDay", async (req, res) => {
  *
  * @param {import('express').Request<{}, {}, showRequestQuery>} req
  */
-onFleetRouter.get("/user", async (req, res) => {
+tasksRouter.get("/user", async (req, res) => {
   logger.log("/user - route query parameters: ", req.query);
 
   const userId = String(req.query?.userId);
