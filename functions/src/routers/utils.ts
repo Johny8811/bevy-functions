@@ -2,6 +2,8 @@ import { add, getTime, set } from "date-fns";
 import { TaskQueryParam } from "@onfleet/node-onfleet/Resources/Tasks";
 import { logger } from "firebase-functions";
 
+// TODO: create two method, one will return params just for next day and,
+//  second will return tasks for selected day
 export const getNextDayTimeValues = (date?: string): Pick<
   TaskQueryParam,
   "from" | "completeAfterAfter" | "completeBeforeBefore"
