@@ -16,6 +16,6 @@ app.get("/", (req, res) => {
   res.send("Server is running.");
 });
 
-app.use("/tasks", onFleetRouter);
+app.use(onFleetRouter);
 
-export const onFleet = https.onRequest(app);
+export const tasks = https.onRequest(app);
