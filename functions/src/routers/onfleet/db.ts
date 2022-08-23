@@ -21,3 +21,18 @@ export const getTasksByDate = ({
   completeAfter: { $gt: completeAfterAfter },
   completeBefore: { $lt: completeBeforeBefore },
 }).toArray();
+
+export const getTasksByDateAndUserId = ({
+  from,
+  completeAfterAfter,
+  completeBeforeBefore,
+}: ReturnType<typeof getNextDayTimeValues>, userId: string) => tasksCollection.find<OnfleetTask>({
+  timeCreated: { $gt: from },
+  completeAfter: { $gt: completeAfterAfter },
+  completeBefore: { $lt: completeBeforeBefore },
+  metadata: {
+    $elemMatch: {
+      value: userId,
+    },
+  },
+}).toArray();
