@@ -5,6 +5,7 @@ import cors from "cors";
 import helmet from "helmet";
 
 import { tasksRouter } from "./routers/tasks";
+import { authorizeUser } from "./middleware/authorizeUser";
 
 const app = express();
 app.use(helmet());
@@ -16,6 +17,7 @@ app.get("/", (req, res) => {
   res.send("Server is running.");
 });
 
+app.use(authorizeUser);
 app.use(tasksRouter);
 
 export const tasks = https.onRequest(app);
