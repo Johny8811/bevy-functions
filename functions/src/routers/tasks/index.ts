@@ -2,7 +2,7 @@ import { logger } from "firebase-functions";
 import * as express from "express";
 
 import { getAllTasks as onFleetGetAllTasks } from "../../integrations/onFleet/getAllTasks";
-import { getOFleetParamsForTomorrowTasks } from "../utils";
+import { filterParamsTomorrowTasks } from "../utils";
 
 import { insertTasks, getTasksByDate, getTasksByDateAndUserId, getTomorrowTasks } from "./db";
 
@@ -15,7 +15,7 @@ tasksRouter.get(
     "/onFleet/export/saveToDb",
     async (req, res) => {
       try {
-        const params = getOFleetParamsForTomorrowTasks();
+        const params = filterParamsTomorrowTasks();
         const tasks = await onFleetGetAllTasks(params);
 
         logger.log(
