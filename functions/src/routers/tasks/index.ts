@@ -2,7 +2,7 @@ import { logger } from "firebase-functions";
 import * as express from "express";
 
 import { getAllTasks as onFleetGetAllTasks } from "../../integrations/onFleet/getAllTasks";
-import { getNextDayTimeValues } from "../utils";
+import { getOFleetParamsForTomorrowTasks } from "../utils";
 
 import { insertTasks, getTasksByDate, getTasksByDateAndUserId } from "./db";
 
@@ -12,11 +12,11 @@ tasksRouter.get(
     "/onFleet/export/saveToDb",
     async (req, res) => {
       try {
-        const timeValues = getNextDayTimeValues();
-        const tasks = await onFleetGetAllTasks(timeValues);
+        const params = getOFleetParamsForTomorrowTasks();
+        const tasks = await onFleetGetAllTasks(params);
 
         logger.log(
-            "/export/saveToDb - Prepared tasks ids for next day: ",
+            "Route:/onFleet/export/saveToDb - Prepared tasks ids for next day: ",
             tasks.map((task) => task.id)
         );
 
@@ -28,7 +28,7 @@ tasksRouter.get(
       } catch (e) {
         // TODO: improve error handling and logging
         //  https://kentcdodds.com/blog/get-a-catch-block-error-message-with-typescript
-        logger.log("/export/saveToDb - Error: ", e);
+        logger.log("Route:/onFleet/export/saveToDb - Error: ", e);
         res.status(500).json({
           error: {
             message: (e as Error).message,
