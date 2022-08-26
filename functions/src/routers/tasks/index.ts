@@ -8,6 +8,9 @@ import { insertTasks, getTomorrowTasks, getTasksByDateAndUserId } from "./db";
 
 export const tasksRouter = express.Router();
 
+/**
+ * Fetch tasks from onFleet planned for next day and save them to our database
+ */
 tasksRouter.get(
     "/onFleet/export/saveToDb",
     async (req, res) => {
@@ -38,6 +41,9 @@ tasksRouter.get(
     },
 );
 
+/**
+ * Get tasks planned for next day - dispatcher role route
+ */
 tasksRouter.get("/tomorrow", async (req, res) => {
   try {
     const tasks = await getTomorrowTasks();
@@ -62,11 +68,10 @@ tasksRouter.get("/tomorrow", async (req, res) => {
 
 // https://stackoverflow.com/questions/57771798/how-do-i-jsdoc-parameters-to-web-request
 /**
- * @typedef {object} requestQuery
+ * Get tasks by "date" || "date & used"
+ *
  * @property {string} userId id of logged user
  * @property {number} date the date for which the data will be obtained
- *
- * @param {import('express').Request<{}, {}, requestQuery>} req
  */
 tasksRouter.get("/", async (req, res) => {
   logger.log("Route:/ - route query parameters: ", req.query);
