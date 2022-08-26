@@ -1,7 +1,7 @@
 import { OnfleetTask } from "@onfleet/node-onfleet/Resources/Tasks";
 
 import { client } from "../../integrations/mongodb";
-import { filterParamsTomorrowTasks } from "../utils";
+import { filterTomorrowTasks } from "../utils";
 import { add, getTime, set } from "date-fns";
 // import { logger } from "firebase-functions";
 
@@ -50,6 +50,6 @@ export const getTasksByDateAndUserId = (date: string, userId: string) => {
 };
 
 export const getTomorrowTasks = () => {
-  const filter = filterParamsTomorrowTasks();
+  const filter = filterTomorrowTasks();
   return tasksCollection.find<OnfleetTask>(filter).toArray();
 };

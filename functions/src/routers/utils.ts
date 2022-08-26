@@ -2,7 +2,7 @@ import { add, getTime, set } from "date-fns";
 import { TaskQueryParam } from "@onfleet/node-onfleet/Resources/Tasks";
 import { logger } from "firebase-functions";
 
-export const filterParamsTomorrowTasks = (): Pick<
+export const filterTomorrowTasks = (): Pick<
   TaskQueryParam,
   "from" | "completeAfterAfter" | "completeBeforeBefore"
 > => {
