@@ -70,8 +70,12 @@ tasksRouter.get("/tomorrow", async (req, res) => {
 /**
  * Get tasks by "date" || "date & used"
  *
+ * @typedef {object} getTasksRequestQuery
  * @property {string} userId id of logged user
  * @property {number} date the date for which the data will be obtained
+ *
+ * @param {import('express').Request<{}, {}, {}, showRequestQuery>} req
+ * @param {import('express').Response} res
  */
 tasksRouter.get("/", async (req, res) => {
   logger.log("Route:/ - route query parameters: ", req.query);
