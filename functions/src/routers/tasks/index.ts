@@ -15,8 +15,8 @@ tasksRouter.get(
     "/onFleet/export/saveToDb",
     async (req, res) => {
       try {
-        const params = filterParamsTomorrowTasks();
-        const tasks = await onFleetGetAllTasks(params);
+        const filter = filterParamsTomorrowTasks();
+        const tasks = await onFleetGetAllTasks(filter);
 
         logger.log(
             "Route:/onFleet/export/saveToDb - Prepared tasks ids for next day: ",

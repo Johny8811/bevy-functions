@@ -1,8 +1,8 @@
 import { OnfleetTask } from "@onfleet/node-onfleet/Resources/Tasks";
 
 import { client } from "../../integrations/mongodb";
-// import { getNextDayTimeValues } from "../utils";
-import { add, getTime, set, sub } from "date-fns";
+import { filterParamsTomorrowTasks } from "../utils";
+import { add, getTime, set } from "date-fns";
 // import { logger } from "firebase-functions";
 
 const tasksCollection = client
@@ -15,14 +15,13 @@ export const insertTasks = (tasks: OnfleetTask[]) => tasksCollection.insertMany(
 );
 
 export const getTasksByDate = (date: string) => {
-  const subtractedDate = sub(new Date(date), { days: 1 });
-  const today = getTime(set(subtractedDate, {
+  const today = getTime(set(new Date(date), {
     hours: 0,
     minutes: 0,
     seconds: 0,
   }));
-  const completeAfterAfter = getTime(add(today, { days: 1 }));
-  const completeBeforeBefore = getTime(add(today, { days: 2 }));
+  const completeAfterAfter = getTime(today);
+  const completeBeforeBefore = getTime(add(today, { days: 1 }));
 
   return tasksCollection.find<OnfleetTask>({
     completeAfter: { $gt: completeAfterAfter },
@@ -31,14 +30,13 @@ export const getTasksByDate = (date: string) => {
 };
 
 export const getTasksByDateAndUserId = (date: string, userId: string) => {
-  const subtractedDate = sub(new Date(date), { days: 1 });
-  const today = getTime(set(subtractedDate, {
+  const today = getTime(set(new Date(date), {
     hours: 0,
     minutes: 0,
     seconds: 0,
   }));
-  const completeAfterAfter = getTime(add(today, { days: 1 }));
-  const completeBeforeBefore = getTime(add(today, { days: 2 }));
+  const completeAfterAfter = getTime(today);
+  const completeBeforeBefore = getTime(add(today, { days: 1 }));
 
   return tasksCollection.find<OnfleetTask>({
     completeAfter: { $gt: completeAfterAfter },
@@ -52,16 +50,6 @@ export const getTasksByDateAndUserId = (date: string, userId: string) => {
 };
 
 export const getTomorrowTasks = () => {
-  const today = getTime(set(new Date(), {
-    hours: 0,
-    minutes: 0,
-    seconds: 0,
-  }));
-  const completeAfterAfter = getTime(add(today, { days: 1 }));
-  const completeBeforeBefore = getTime(add(today, { days: 2 }));
-
-  return tasksCollection.find<OnfleetTask>({
-    completeAfter: { $gt: completeAfterAfter },
-    completeBefore: { $lt: completeBeforeBefore },
-  }).toArray();
+  const filter = filterParamsTomorrowTasks();
+  return tasksCollection.find<OnfleetTask>(filter).toArray();
 };
