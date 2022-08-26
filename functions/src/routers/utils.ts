@@ -14,7 +14,7 @@ export const filterTomorrowTasks = (): Pick<
   const completeAfterAfter = getTime(add(from, { days: 1 }));
   const completeBeforeBefore = getTime(add(from, { days: 2 }));
 
-  logger.log("getTasksForNextDay - Get tasks times: ", {
+  logger.log("filterTomorrowTasks: ", {
     createdFrom: from,
     completeAfterAfter,
     completeBeforeBefore,
