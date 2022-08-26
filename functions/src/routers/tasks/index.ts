@@ -4,7 +4,7 @@ import * as express from "express";
 import { getAllTasks as onFleetGetAllTasks } from "../../integrations/onFleet/getAllTasks";
 import { getOFleetParamsForTomorrowTasks } from "../utils";
 
-import { insertTasks, getTasksByDate, getTasksByDateAndUserId } from "./db";
+import { insertTasks, getTomorrowTasks, getTasksByDateAndUserId } from "./db";
 
 export const tasksRouter = express.Router();
 
@@ -38,13 +38,12 @@ tasksRouter.get(
     },
 );
 
-tasksRouter.get("/nextDay", async (req, res) => {
+tasksRouter.get("/tomorrow", async (req, res) => {
   try {
-    const timeValues = getNextDayTimeValues();
-    const tasks = await getTasksByDate(timeValues);
+    const tasks = await getTomorrowTasks();
 
     logger.log(
-        "/export/saveToDb - Prepared tasks ids for next day: ",
+        "Route:/tomorrow - Prepared tasks ids for next day: ",
         tasks.map((task) => task.id)
     );
 
@@ -52,7 +51,7 @@ tasksRouter.get("/nextDay", async (req, res) => {
   } catch (e) {
     // TODO: improve error handling and logging
     //  https://kentcdodds.com/blog/get-a-catch-block-error-message-with-typescript
-    logger.log("Route:/export/saveToDb - Error: ", e);
+    logger.log("Route:/tomorrow - Error: ", e);
     res.status(500).json({
       error: {
         message: (e as Error).message,
@@ -63,20 +62,20 @@ tasksRouter.get("/nextDay", async (req, res) => {
 
 // https://stackoverflow.com/questions/57771798/how-do-i-jsdoc-parameters-to-web-request
 /**
- * @typedef {object} userRequestQuery
+ * @typedef {object} requestQuery
  * @property {string} userId id of logged user
  * @property {number} date the date for which the data will be obtained
  *
- * @param {import('express').Request<{}, {}, showRequestQuery>} req
+ * @param {import('express').Request<{}, {}, requestQuery>} req
  */
-tasksRouter.get("/user", async (req, res) => {
-  logger.log("/user - route query parameters: ", req.query);
+tasksRouter.get("/", async (req, res) => {
+  logger.log("Route:/ - route query parameters: ", req.query);
 
   const userId = String(req.query?.userId);
-  const selectedDate = String(req.query?.date);
+  const date = String(req.query?.date);
 
   try {
-    if (userId.includes("undefined") || selectedDate.includes("undefined")) {
+    if (userId.includes("undefined") || date.includes("undefined")) {
       res.status(400).json({
         error: {
           message: "Missing route query parameters 'userId' and 'date'",
@@ -84,15 +83,13 @@ tasksRouter.get("/user", async (req, res) => {
       });
     }
 
-    const timeValues = getNextDayTimeValues(selectedDate);
-
-    const tasks = await getTasksByDateAndUserId({ ...timeValues }, userId);
+    const tasks = await getTasksByDateAndUserId(date, userId);
 
     res.status(200).json(tasks);
   } catch (e) {
     // TODO: improve error handling and logging
     //  https://kentcdodds.com/blog/get-a-catch-block-error-message-with-typescript
-    logger.log("Route:/export/saveToDb - Error: ", e);
+    logger.log("Route:/ - Error: ", e);
     res.status(500).json({
       error: {
         message: (e as Error).message,
