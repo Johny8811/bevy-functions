@@ -4,7 +4,7 @@ import * as express from "express";
 import { getAllTasks as onFleetGetAllTasks } from "../../integrations/onFleet/getAllTasks";
 import { filterTomorrowTasks } from "../utils";
 
-import { insertTasks, getTasksByDate, getTasksByDateAndUserId, getTomorrowTasks } from "./db";
+import { insertTasks, findTasksByDate, findTasksByDateAndUserId, findTomorrowTasks } from "./db";
 
 export const tasksRouter = express.Router();
 
@@ -46,7 +46,7 @@ tasksRouter.get(
  */
 tasksRouter.get("/tomorrow", async (req, res) => {
   try {
-    const tasks = await getTomorrowTasks();
+    const tasks = await findTomorrowTasks();
 
     logger.log(
         "Route:/tomorrow - Prepared tasks ids for next day: ",
@@ -93,10 +93,10 @@ tasksRouter.get("/", async (req, res) => {
     }
 
     if (userId) {
-      const tasks = await getTasksByDate(date);
+      const tasks = await findTasksByDate(date);
       res.status(200).json(tasks);
     } else {
-      const tasks = await getTasksByDateAndUserId(date, userId);
+      const tasks = await findTasksByDateAndUserId(date, userId);
       res.status(200).json(tasks);
     }
   } catch (e) {
