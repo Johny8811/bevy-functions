@@ -77,6 +77,7 @@ tasksRouter.get("/tomorrow", async (req, res) => {
  * @param {import('express').Request<{}, {}, {}, showRequestQuery>} req
  * @param {import('express').Response} res
  */
+// TODO: only "user" & "root" role should have possibility to call this route
 tasksRouter.get("/", async (req, res) => {
   logger.log("Route:/ - route query parameters: ", req.query);
 
