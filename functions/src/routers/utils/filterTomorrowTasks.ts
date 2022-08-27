@@ -5,7 +5,7 @@ import { logger } from "firebase-functions";
 export const filterTomorrowTasks = (): Pick<
   TaskQueryParam,
   "from" | "completeAfterAfter" | "completeBeforeBefore"
-> => {
+  > => {
   const from = getTime(set(new Date(), {
     hours: 0,
     minutes: 0,

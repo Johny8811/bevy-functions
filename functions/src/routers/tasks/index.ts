@@ -2,7 +2,7 @@ import { logger } from "firebase-functions";
 import * as express from "express";
 
 import { getAllTasks as onFleetGetAllTasks } from "../../integrations/onFleet/getAllTasks";
-import { filterTomorrowTasks } from "../utils";
+import { filterTomorrowTasks } from "../utils/filterTomorrowTasks";
 
 import { insertTasks, findTasksByDate, findTasksByDateAndUserId, findTomorrowTasks } from "./db";
 

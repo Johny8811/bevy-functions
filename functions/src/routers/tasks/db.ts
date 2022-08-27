@@ -1,7 +1,7 @@
 import { OnfleetTask } from "@onfleet/node-onfleet/Resources/Tasks";
 
 import { client } from "../../integrations/mongodb";
-import { filterTomorrowTasks } from "../utils";
+import { filterTomorrowTasks } from "../utils/filterTomorrowTasks";
 import { add, getTime } from "date-fns";
 import { logger } from "firebase-functions";
 
