@@ -14,12 +14,20 @@ export const insertTasks = (tasks: OnfleetTask[]) => tasksCollection.insertMany(
     { ordered: true }
 );
 
+export const updateTask = (task: OnfleetTask) => tasksCollection.updateOne(
+    { id: task.id },
+    {
+      $set: {
+        ...task,
+      },
+    },
+);
+
 export const findTasksByIDs = (ids: string[]) => tasksCollection
     .find<OnfleetTask>({
       id: { $in: ids },
     })
     .toArray();
-
 
 export const findTasksByDate = (date: string) => {
   const completeAfterAfter = getTime(new Date(date));
@@ -55,18 +63,3 @@ export const findTomorrowTasks = () => {
   return tasksCollection.find<OnfleetTask>(filter).toArray();
 };
 
-/*
-export const updateTasks = () => {
-  const completeAfterAfter = getTime(new Date("06/19/2023"));
-  const completeBeforeBefore = getTime(add(completeAfterAfter, { days: 1 }));
-
-  const filter = {
-    completeAfter: { $gt: completeAfterAfter },
-    completeBefore: { $lt: completeBeforeBefore },
-  };
-
-  return tasksCollection.updateMany({
-
-  });
-};
-*/
