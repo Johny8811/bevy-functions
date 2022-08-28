@@ -3,8 +3,17 @@ import * as express from "express";
 
 import { getAllTasks as onFleetGetAllTasks } from "../../integrations/onFleet/getAllTasks";
 import { filterTomorrowTasks } from "../utils/filterTomorrowTasks";
+import { filterOnFleetExportByDbTasks } from "../utils/filterOnFleetExportByDbTasks";
+import { asyncForEach } from "../../utils/asyncForEach";
 
-import { insertTasks, findTasksByDate, findTasksByDateAndUserId, findTomorrowTasks } from "./db";
+import {
+  insertTasks,
+  updateTask,
+  findTasksByIDs,
+  findTasksByDate,
+  findTasksByDateAndUserId,
+  findTomorrowTasks,
+} from "./db";
 
 export const tasksRouter = express.Router();
 
@@ -16,18 +25,44 @@ tasksRouter.get(
     async (req, res) => {
       try {
         const filter = filterTomorrowTasks();
-        const tasks = await onFleetGetAllTasks(filter);
+        const onFleetTasks = await onFleetGetAllTasks(filter);
+        const exportedTasksIds = onFleetTasks.map((t) => t.id);
 
         logger.log(
-            "Route:/onFleet/export/saveToDb - Prepared tasks ids for next day: ",
-            tasks.map((task) => task.id)
+            "Route:/onFleet/export/saveToDb - Prepared tasks ids for tomorrow: ",
+            exportedTasksIds
         );
 
-        if (tasks.length > 0) {
-          await insertTasks(tasks);
-        }
+        if (onFleetTasks.length > 0) {
+          const databaseTasks = await findTasksByIDs(exportedTasksIds);
 
-        res.status(200).json(tasks);
+          const { newTasks, updatedTasks } = filterOnFleetExportByDbTasks(onFleetTasks, databaseTasks);
+
+          logger.log("Route:/onFleet/export/saveToDb - new tasks ids: ", newTasks.map((t) => t.id));
+          logger.log("Route:/onFleet/export/saveToDb - updated tasks ids: ",
+              updatedTasks.map((t) => t.id)
+          );
+
+          if (newTasks.length > 0) {
+            await insertTasks(newTasks);
+          }
+
+          if (updatedTasks.length > 0) {
+            await asyncForEach(updatedTasks, async (task) => {
+              await updateTask(task);
+            });
+          }
+
+          res.status(200).json({
+            custom: {
+              newTasks,
+              updatedTasks,
+            },
+            onFleetTasks,
+          });
+        } else {
+          res.status(200).json([]);
+        }
       } catch (e) {
         // TODO: improve error handling and logging
         //  https://kentcdodds.com/blog/get-a-catch-block-error-message-with-typescript
