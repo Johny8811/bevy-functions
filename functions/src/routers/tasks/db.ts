@@ -14,6 +14,13 @@ export const insertTasks = (tasks: OnfleetTask[]) => tasksCollection.insertMany(
     { ordered: true }
 );
 
+export const findTasksByIDs = (ids: string[]) => tasksCollection
+    .find<OnfleetTask>({
+      id: { $in: ids },
+    })
+    .toArray();
+
+
 export const findTasksByDate = (date: string) => {
   const completeAfterAfter = getTime(new Date(date));
   const completeBeforeBefore = getTime(add(completeAfterAfter, { days: 1 }));
