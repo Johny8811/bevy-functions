@@ -53,13 +53,7 @@ tasksRouter.get(
             });
           }
 
-          res.status(200).json({
-            custom: {
-              newTasks,
-              updatedTasks,
-            },
-            onFleetTasks,
-          });
+          res.status(200).json(onFleetTasks);
         } else {
           res.status(200).json([]);
         }
@@ -103,7 +97,7 @@ tasksRouter.get("/tomorrow", async (req, res) => {
 
 // https://stackoverflow.com/questions/57771798/how-do-i-jsdoc-parameters-to-web-request
 /**
- * Get tasks by "date" || "date & used"
+ * Get tasks by "date" || "date & usedId"
  *
  * @typedef {object} getTasksRequestQuery
  * @property {string} userId id of logged user
@@ -116,23 +110,24 @@ tasksRouter.get("/tomorrow", async (req, res) => {
 tasksRouter.get("/", async (req, res) => {
   logger.log("Route:/ - route query parameters: ", req.query);
 
-  const userId = String(req.query?.userId);
-  const date = String(req.query?.date);
+  const userId = req.query?.userId && String(req.query?.userId);
+  const date = req.query?.date && String(req.query?.date);
 
   try {
-    if (date.includes("undefined")) {
+    if (!date) {
       res.status(400).json({
         error: {
           message: "Missing route query parameters 'date'",
         },
       });
+      return;
     }
 
     if (userId) {
-      const tasks = await findTasksByDate(date);
+      const tasks = await findTasksByDateAndUserId(date, userId);
       res.status(200).json(tasks);
     } else {
-      const tasks = await findTasksByDateAndUserId(date, userId);
+      const tasks = await findTasksByDate(date);
       res.status(200).json(tasks);
     }
   } catch (e) {
