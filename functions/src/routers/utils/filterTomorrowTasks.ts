@@ -1,4 +1,4 @@
-import { add, getTime, set } from "date-fns";
+import { add, sub, getTime, set } from "date-fns";
 import { TaskQueryParam } from "@onfleet/node-onfleet/Resources/Tasks";
 import { logger } from "firebase-functions";
 
@@ -6,13 +6,14 @@ export const filterTomorrowTasks = (): Pick<
   TaskQueryParam,
   "from" | "completeAfterAfter" | "completeBeforeBefore"
   > => {
-  const from = getTime(set(new Date(), {
+  const today = set(new Date(), {
     hours: 0,
     minutes: 0,
     seconds: 0,
-  }));
-  const completeAfterAfter = getTime(add(from, { days: 1 }));
-  const completeBeforeBefore = getTime(add(from, { days: 2 }));
+  });
+  const from = getTime(sub(today, { days: 7 }));
+  const completeAfterAfter = getTime(add(today, { days: 1 }));
+  const completeBeforeBefore = getTime(add(today, { days: 2 }));
 
   logger.log("filterTomorrowTasks: ", {
     createdFrom: from,

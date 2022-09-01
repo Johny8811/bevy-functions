@@ -59,10 +59,13 @@ export const findTasksByDateAndUserId = (date: string, userId: string) => {
 };
 
 export const findTomorrowTasks = () => {
-  const filter = filterTomorrowTasks();
+  const { completeAfterAfter, completeBeforeBefore } = filterTomorrowTasks();
 
-  logger.log("tasksDb:findTomorrowTasks: ", filter);
+  logger.log("tasksDb:findTomorrowTasks: ", { completeAfterAfter, completeBeforeBefore });
 
-  return tasksCollection.find<OnfleetTask>(filter).toArray();
+  return tasksCollection.find<OnfleetTask>({
+    completeAfter: { $gt: completeAfterAfter },
+    completeBefore: { $lt: completeBeforeBefore },
+  }).toArray();
 };
 
