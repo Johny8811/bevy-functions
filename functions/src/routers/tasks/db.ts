@@ -60,6 +60,9 @@ export const findTasksByDateAndUserId = (date: string, userId: string) => {
 
 export const findTomorrowTasks = () => {
   const filter = filterTomorrowTasks();
+
+  logger.log("tasksDb:findTomorrowTasks: ", filter);
+
   return tasksCollection.find<OnfleetTask>(filter).toArray();
 };
 
