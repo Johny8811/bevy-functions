@@ -1,4 +1,4 @@
-import { OnfleetTask } from "@onfleet/node-onfleet/Resources/Tasks";
+import { GetTaskResult } from "@onfleet/node-onfleet/Resources/Tasks";
 
 import { client } from "../../integrations/mongodb";
 import { filterTomorrowTasks } from "../utils/filterTomorrowTasks";
@@ -7,14 +7,14 @@ import { logger } from "firebase-functions";
 
 const tasksCollection = client
     .db("on_fleet")
-    .collection<OnfleetTask>("tasks");
+    .collection<GetTaskResult>("tasks");
 
-export const insertTasks = (tasks: OnfleetTask[]) => tasksCollection.insertMany(
+export const insertTasks = (tasks: GetTaskResult[]) => tasksCollection.insertMany(
     tasks,
     { ordered: true }
 );
 
-export const updateTask = (task: OnfleetTask) => tasksCollection.updateOne(
+export const updateTask = (task: GetTaskResult) => tasksCollection.updateOne(
     { id: task.id },
     {
       $set: {
@@ -24,7 +24,7 @@ export const updateTask = (task: OnfleetTask) => tasksCollection.updateOne(
 );
 
 export const findTasksByIDs = (ids: string[]) => tasksCollection
-    .find<OnfleetTask>({
+    .find<GetTaskResult>({
       id: { $in: ids },
     })
     .toArray();
@@ -35,7 +35,7 @@ export const findTasksByDate = (date: string) => {
 
   logger.log("tasksDb:getTasksByDate: ", { date, completeAfterAfter, completeBeforeBefore });
 
-  return tasksCollection.find<OnfleetTask>({
+  return tasksCollection.find<GetTaskResult>({
     completeAfter: { $gt: completeAfterAfter },
     completeBefore: { $lt: completeBeforeBefore },
   }).toArray();
@@ -47,7 +47,7 @@ export const findTasksByDateAndUserId = (date: string, userId: string) => {
 
   logger.log("tasksDb:getTasksByDateAndUserId: ", { date, userId, completeAfterAfter, completeBeforeBefore });
 
-  return tasksCollection.find<OnfleetTask>({
+  return tasksCollection.find<GetTaskResult>({
     completeAfter: { $gt: completeAfterAfter },
     completeBefore: { $lt: completeBeforeBefore },
     metadata: {
@@ -63,7 +63,7 @@ export const findTomorrowTasks = () => {
 
   logger.log("tasksDb:findTomorrowTasks: ", { completeAfterAfter, completeBeforeBefore });
 
-  return tasksCollection.find<OnfleetTask>({
+  return tasksCollection.find<GetTaskResult>({
     completeAfter: { $gt: completeAfterAfter },
     completeBefore: { $lt: completeBeforeBefore },
   }).toArray();
