@@ -2,22 +2,23 @@ import { getHours, set, isBefore, add, getTime } from "date-fns";
 
 import { OriginOnFleetTask } from "../../types/tasks";
 
+// TODO: add tests
 export const generateHourlyTimeSlot = (taskResult: OriginOnFleetTask) => {
-  const ect = taskResult.estimatedCompletionTime;
+  const eat = taskResult.estimatedArrivalTime;
 
-  if (ect) {
-    const ectHour = getHours(ect);
-    const ectHalfHour = set(ect, {
-      hours: ectHour,
+  if (eat) {
+    const eatHour = getHours(eat);
+    const eatHalfHour = set(eat, {
+      hours: eatHour,
       minutes: 30,
       seconds: 0,
       milliseconds: 0,
     });
 
-    const isInFirstHalfHour = isBefore(ect, ectHalfHour);
+    const isInFirstHalfHour = isBefore(eat, eatHalfHour);
 
-    const start = getTime(add(set(ect, {
-      hours: ectHour,
+    const start = getTime(add(set(eat, {
+      hours: eatHour,
       minutes: 0,
       seconds: 0,
       milliseconds: 0,
