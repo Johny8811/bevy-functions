@@ -1,4 +1,3 @@
-import { logger } from "firebase-functions";
 import { getHours, set, isBefore, add, getTime } from "date-fns";
 
 import { OriginOnFleetTask } from "../../types/tasks";
@@ -24,11 +23,6 @@ export const generateHourlyTimeSlot = (taskResult: OriginOnFleetTask) => {
       milliseconds: 0,
     }), { minutes: isInFirstHalfHour ? 0 : 30 }));
     const end = getTime(add(start, { hours: 1 }));
-
-    logger.log("generateTimeSlot:{ start, end } ", {
-      start,
-      end,
-    });
 
     return {
       start,
