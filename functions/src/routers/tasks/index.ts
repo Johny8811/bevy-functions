@@ -3,6 +3,7 @@ import * as express from "express";
 
 import { getAllTasks as onFleetGetAllTasks } from "../../integrations/onFleet/getAllTasks";
 import { filterTomorrowTasks } from "../utils/filterTomorrowTasks";
+import { generateHourlyTimeSlot } from "../utils/generateHourlyTimeSlot";
 import { filterOnFleetExportByDbTasks } from "../utils/filterOnFleetExportByDbTasks";
 import { asyncForEach } from "../../utils/asyncForEach";
 
@@ -34,9 +35,10 @@ tasksRouter.get(
         );
 
         if (onFleetTasks.length > 0) {
+          const ourOnFleetTasks = onFleetTasks.map((t) => ({ ...t, slot: generateHourlyTimeSlot(t) }));
           const databaseTasks = await findTasksByIDs(exportedTasksIds);
 
-          const { newTasks, updatedTasks } = filterOnFleetExportByDbTasks(onFleetTasks, databaseTasks);
+          const { newTasks, updatedTasks } = filterOnFleetExportByDbTasks(ourOnFleetTasks, databaseTasks);
 
           logger.log("Route:/onFleet/export/saveToDb - new tasks ids: ", newTasks.map((t) => t.id));
           logger.log("Route:/onFleet/export/saveToDb - updated tasks ids: ",
@@ -53,7 +55,7 @@ tasksRouter.get(
             });
           }
 
-          res.status(200).json(onFleetTasks);
+          res.status(200).json(ourOnFleetTasks);
         } else {
           res.status(200).json([]);
         }
