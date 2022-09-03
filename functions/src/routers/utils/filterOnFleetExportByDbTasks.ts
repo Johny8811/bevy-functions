@@ -1,6 +1,6 @@
 import { isEqual } from "date-fns";
 
-import { OurTaskResult } from "../../types/tasks";
+import { OurOnFleetTask } from "../../types/tasks";
 
 const initState = {
   updatedTasks: [],
@@ -8,13 +8,13 @@ const initState = {
 };
 
 type Result = {
-  updatedTasks: OurTaskResult[],
-  newTasks: OurTaskResult[],
+  updatedTasks: OurOnFleetTask[],
+  newTasks: OurOnFleetTask[],
 };
 
 // TODO: test
-export const filterOnFleetExportByDbTasks = (OurTasks: OurTaskResult[], databaseTasks: OurTaskResult[]) =>
-  OurTasks.reduce<Result>((total, onFleetTask) => {
+export const filterOnFleetExportByDbTasks = (ourOnFleetTasks: OurOnFleetTask[], databaseTasks: OurOnFleetTask[]) =>
+  ourOnFleetTasks.reduce<Result>((total, onFleetTask) => {
     const dbFoundTask = databaseTasks.find((t) => t.id === onFleetTask.id);
     const isSame = dbFoundTask && isEqual(dbFoundTask.timeLastModified, onFleetTask.timeLastModified);
 

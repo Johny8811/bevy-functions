@@ -1,19 +1,19 @@
 import { client } from "../../integrations/mongodb";
-import { OurTaskResult } from "../../types/tasks";
+import { OurOnFleetTask } from "../../types/tasks";
 import { filterTomorrowTasks } from "../utils/filterTomorrowTasks";
 import { add, getTime } from "date-fns";
 import { logger } from "firebase-functions";
 
 const tasksCollection = client
     .db("on_fleet")
-    .collection<OurTaskResult>("tasks");
+    .collection<OurOnFleetTask>("tasks");
 
-export const insertTasks = (tasks: OurTaskResult[]) => tasksCollection.insertMany(
+export const insertTasks = (tasks: OurOnFleetTask[]) => tasksCollection.insertMany(
     tasks,
     { ordered: true }
 );
 
-export const updateTask = (task: OurTaskResult) => tasksCollection.updateOne(
+export const updateTask = (task: OurOnFleetTask) => tasksCollection.updateOne(
     { id: task.id },
     {
       $set: {

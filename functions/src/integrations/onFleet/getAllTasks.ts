@@ -1,11 +1,11 @@
 import { TaskQueryParam } from "@onfleet/node-onfleet/Resources/Tasks";
 
-import { OriginTaskResult } from "../../types/tasks";
+import { OriginOnFleetTask } from "../../types/tasks";
 import { onFleetApi } from "./";
 import { logger } from "firebase-functions";
 
 export const getAllTasks = async (params: TaskQueryParam) => {
-  let allTasks: OriginTaskResult[] = [];
+  let allTasks: OriginOnFleetTask[] = [];
 
   // SECURITY FEATURE - if something broke, functions will iterate only 100 times
   // onFleet get return 64 items in page. 100 * 64 = 6400 tasks
