@@ -18,6 +18,9 @@ export const getAllTasks = async (params: TaskQueryParam) => {
    */
   await (async function getTasks(innerParams: TaskQueryParam) {
     const { tasks, lastId: currentLastId } = await onFleetApi.tasks.get(innerParams);
+    // FIXME: investigate onFleet types, module "@onfleet/node-onfleet" has bad type coverage of onFleet api
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     allTasks = [...allTasks, ...tasks];
 
     logger.log(`getAllTasks - iteration ${allTasks.length}, iteration: ${iteration}`);

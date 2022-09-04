@@ -1,6 +1,5 @@
 import { UpdateTaskResult } from "@onfleet/node-onfleet/Resources/Tasks";
 
-// TODO: investigate onFleet types, module "@onfleet/node-onfleet" has bad coverage of onFleet types
 export type OurOnFleetTask = {
   slot: {
     start: number,
@@ -8,4 +7,5 @@ export type OurOnFleetTask = {
   } | null
 } & UpdateTaskResult
 
+// TODO: investigate onFleet types, module "@onfleet/node-onfleet" has bad type coverage of onFleet api
 export type OriginOnFleetTask = UpdateTaskResult
