@@ -3,7 +3,8 @@ import { MongoClient, ServerApiVersion } from "mongodb";
 
 import { getEnvVariableOrExit } from "../../utils/getEnvVariableOrExit";
 
-const mongoUri = getEnvVariableOrExit("MONGO_URI");
+// TODO: implement dev flag to change mongo URI
+const mongoUri = getEnvVariableOrExit("MONGO_URI_PROD");
 
 export const client = new MongoClient(mongoUri, {
   // FIXME: ts doesn't know some props of mongo client
