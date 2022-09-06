@@ -1,5 +1,8 @@
 {
   "projects": {
-    "default": "bevy-bbf67"
-  }
+    "default": "bevy-bbf67",
+    "prod": "bevy-c8798"
+  },
+  "targets": {},
+  "etags": {}
 }
