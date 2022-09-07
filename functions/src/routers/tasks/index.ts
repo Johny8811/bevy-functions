@@ -18,85 +18,6 @@ import {
 
 export const tasksRouter = express.Router();
 
-/**
- * Fetch tasks from onFleet planned for next day and save them to our database
- */
-tasksRouter.get(
-    "/onFleet/export/saveToDb",
-    async (req, res) => {
-      try {
-        const filter = filterTomorrowTasks();
-        const onFleetTasks = await onFleetGetAllTasks(filter);
-        const exportedTasksIds = onFleetTasks.map((t) => t.id);
-
-        logger.log(
-            "Route:/onFleet/export/saveToDb - Prepared tasks ids for tomorrow: ",
-            exportedTasksIds
-        );
-
-        if (onFleetTasks.length > 0) {
-          const ourOnFleetTasks = onFleetTasks.map((t) => ({ ...t, slot: generateHourlyTimeSlot(t) }));
-          const databaseTasks = await findTasksByIDs(exportedTasksIds);
-
-          const { newTasks, updatedTasks } = filterOnFleetExportByDbTasks(ourOnFleetTasks, databaseTasks);
-
-          logger.log("Route:/onFleet/export/saveToDb - new tasks ids: ", newTasks.map((t) => t.id));
-          logger.log("Route:/onFleet/export/saveToDb - updated tasks ids: ",
-              updatedTasks.map((t) => t.id)
-          );
-
-          if (newTasks.length > 0) {
-            await insertTasks(newTasks);
-          }
-
-          if (updatedTasks.length > 0) {
-            await asyncForEach(updatedTasks, async (task) => {
-              await updateTask(task);
-            });
-          }
-
-          res.status(200).json(ourOnFleetTasks);
-        } else {
-          res.status(200).json([]);
-        }
-      } catch (e) {
-        // TODO: improve error handling and logging
-        //  https://kentcdodds.com/blog/get-a-catch-block-error-message-with-typescript
-        logger.log("Route:/onFleet/export/saveToDb - Error: ", e);
-        res.status(500).json({
-          error: {
-            message: (e as Error).message,
-          },
-        });
-      }
-    },
-);
-
-/**
- * Get tasks planned for next day - dispatcher role route
- */
-tasksRouter.get("/tomorrow", async (req, res) => {
-  try {
-    const tasks = await findTomorrowTasks();
-
-    logger.log(
-        "Route:/tomorrow - Prepared tasks ids for next day: ",
-        tasks.map((task) => task.id)
-    );
-
-    res.status(200).json(tasks);
-  } catch (e) {
-    // TODO: improve error handling and logging
-    //  https://kentcdodds.com/blog/get-a-catch-block-error-message-with-typescript
-    logger.log("Route:/tomorrow - Error: ", e);
-    res.status(500).json({
-      error: {
-        message: (e as Error).message,
-      },
-    });
-  }
-});
-
 // https://stackoverflow.com/questions/57771798/how-do-i-jsdoc-parameters-to-web-request
 /**
  * Get tasks by "date" || "date & usedId"
@@ -143,3 +64,82 @@ tasksRouter.get("/", async (req, res) => {
     });
   }
 });
+
+/**
+ * Get tasks planned for next day - dispatcher role route
+ */
+tasksRouter.get("/tomorrow", async (req, res) => {
+  try {
+    const tasks = await findTomorrowTasks();
+
+    logger.log(
+        "Route:/tomorrow - Prepared tasks ids for next day: ",
+        tasks.map((task) => task.id)
+    );
+
+    res.status(200).json(tasks);
+  } catch (e) {
+    // TODO: improve error handling and logging
+    //  https://kentcdodds.com/blog/get-a-catch-block-error-message-with-typescript
+    logger.log("Route:/tomorrow - Error: ", e);
+    res.status(500).json({
+      error: {
+        message: (e as Error).message,
+      },
+    });
+  }
+});
+
+/**
+ * Fetch tasks from onFleet planned for next day and save them to our database
+ */
+tasksRouter.get(
+    "/onFleet/export/saveToDb",
+    async (req, res) => {
+      try {
+        const filter = filterTomorrowTasks();
+        const onFleetTasks = await onFleetGetAllTasks(filter);
+        const exportedTasksIds = onFleetTasks.map((t) => t.id);
+
+        logger.log(
+            "Route:/onFleet/export/saveToDb - Prepared tasks ids for tomorrow: ",
+            exportedTasksIds
+        );
+
+        if (onFleetTasks.length > 0) {
+          const ourOnFleetTasks = onFleetTasks.map((t) => ({ ...t, slot: generateHourlyTimeSlot(t) }));
+          const databaseTasks = await findTasksByIDs(exportedTasksIds);
+
+          const { newTasks, updatedTasks } = filterOnFleetExportByDbTasks(ourOnFleetTasks, databaseTasks);
+
+          logger.log("Route:/onFleet/export/saveToDb - new tasks ids: ", newTasks.map((t) => t.id));
+          logger.log("Route:/onFleet/export/saveToDb - updated tasks ids: ",
+              updatedTasks.map((t) => t.id)
+          );
+
+          if (newTasks.length > 0) {
+            await insertTasks(newTasks);
+          }
+
+          if (updatedTasks.length > 0) {
+            await asyncForEach(updatedTasks, async (task) => {
+              await updateTask(task);
+            });
+          }
+
+          res.status(200).json(ourOnFleetTasks);
+        } else {
+          res.status(200).json([]);
+        }
+      } catch (e) {
+      // TODO: improve error handling and logging
+      //  https://kentcdodds.com/blog/get-a-catch-block-error-message-with-typescript
+        logger.log("Route:/onFleet/export/saveToDb - Error: ", e);
+        res.status(500).json({
+          error: {
+            message: (e as Error).message,
+          },
+        });
+      }
+    },
+);
