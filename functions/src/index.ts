@@ -16,6 +16,7 @@ app.use(express.json());
 app.use(authorizeUser);
 app.use(tasksRouter);
 
-// TODO: analyze next evolution of app and adjust structure by results of this analysis
+app.get("/user/update", updateUserInfo);
+
+// TODO: change to "tasks" to "bevy" --> route will be: tasks, user, etc.
 export const tasks = https.onRequest(app);
-export const user = https.onRequest(updateUserInfo);
