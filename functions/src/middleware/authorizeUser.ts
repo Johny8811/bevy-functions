@@ -1,8 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import { logger } from "firebase-functions";
-import admin from "firebase-admin";
-
-admin.initializeApp();
+import { firebaseAdmin } from "../integrations/firebase/index";
 
 // source: https://github.com/firebase/functions-samples/tree/main/authorized-https-endpoint
 export const authorizeUser = async (req: Request, res: Response, next: NextFunction) => {
@@ -28,7 +26,7 @@ export const authorizeUser = async (req: Request, res: Response, next: NextFunct
   }
 
   try {
-    const decodedIdToken = await admin.auth().verifyIdToken(idToken);
+    const decodedIdToken = await firebaseAdmin.auth().verifyIdToken(idToken);
     logger.log("authorizeUser: ID Token correctly decoded", decodedIdToken);
     // FIXME: type correctly, see "src/types/custom.d.ts" - "decodedIdToken" come from firebase-admin
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
