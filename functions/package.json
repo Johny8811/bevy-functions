@@ -10,7 +10,7 @@
     "deploy": "firebase deploy --only functions",
     "logs": "firebase functions:log",
     "emulator:start": "firebase emulators:start",
-    "deploy:functions": "firebase deploy --only functions"
+    "deploy:functions": "yarn build && firebase deploy --only functions"
   },
   "engines": {
     "node": "16"
