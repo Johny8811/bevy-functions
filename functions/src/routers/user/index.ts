@@ -21,12 +21,19 @@ export const updateUserInfo = async (req: Request, res: Response) => {
 
   try {
     await firebaseAdmin.auth().updateUser(userId, {
-      displayName,
-      photoURL,
+      displayName: displayName || null,
+      photoURL: photoURL || null,
     });
 
-    res.status(200);
+    res.status(204).end();
   } catch (e) {
+    // TODO: improve error handling and logging
+    //  https://kentcdodds.com/blog/get-a-catch-block-error-message-with-typescript
     logger.log("Route:/user/update - Error: ", e);
+    res.status(500).json({
+      error: {
+        message: (e as Error).message,
+      },
+    });
   }
 };
