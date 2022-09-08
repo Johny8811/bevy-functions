@@ -16,7 +16,7 @@ app.use(express.json());
 app.use(authorizeUser);
 app.use(tasksRouter);
 
-app.get("/user/update", updateUserInfo);
+app.put("/user/update", updateUserInfo);
 
 // TODO: change to "tasks" to "bevy" --> route will be: tasks, user, etc.
 export const tasks = https.onRequest(app);
