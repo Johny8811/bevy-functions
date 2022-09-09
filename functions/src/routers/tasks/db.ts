@@ -4,8 +4,10 @@ import { filterTomorrowTasks } from "../utils/filterTomorrowTasks";
 import { add, getTime } from "date-fns";
 import { logger } from "firebase-functions";
 
+import { DEVELOPMENT } from "../../constants";
+
 const tasksCollection = client
-    .db("on_fleet")
+    .db(DEVELOPMENT ? "dev_on_fleet" : "on_fleet")
     .collection<OurOnFleetTask>("tasks");
 
 export const insertTasks = (tasks: OurOnFleetTask[]) => tasksCollection.insertMany(
