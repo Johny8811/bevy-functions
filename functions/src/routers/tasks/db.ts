@@ -1,6 +1,6 @@
 import { client } from "../../integrations/mongodb";
 import { OurOnFleetTask } from "../../types/tasks";
-import { filterTomorrowTasks } from "../utils/filterTomorrowTasks";
+import { tomorrowTasks as tomorrowTasksFilter } from "./filters/tomorrowTasks";
 import { add, getTime } from "date-fns";
 import { logger } from "firebase-functions";
 
@@ -60,7 +60,7 @@ export const findTasksByDateAndUserId = (date: string, userId: string) => {
 };
 
 export const findTomorrowTasks = () => {
-  const { completeAfterAfter, completeBeforeBefore } = filterTomorrowTasks();
+  const { completeAfterAfter, completeBeforeBefore } = tomorrowTasksFilter();
 
   logger.log("tasksDb:findTomorrowTasks: ", { completeAfterAfter, completeBeforeBefore });
 

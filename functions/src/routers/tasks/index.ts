@@ -2,7 +2,7 @@ import { logger } from "firebase-functions";
 import * as express from "express";
 
 import { getAllTasks as onFleetGetAllTasks } from "../../integrations/onFleet/getAllTasks";
-import { filterTomorrowTasks } from "../utils/filterTomorrowTasks";
+import { tomorrowTasks as tomorrowTasksFilter } from "./filters/tomorrowTasks";
 import { generateHourlyTimeSlot } from "../utils/generateHourlyTimeSlot";
 import { filterOnFleetExportByDbTasks } from "../utils/filterOnFleetExportByDbTasks";
 import { asyncForEach } from "../../utils/asyncForEach";
@@ -97,7 +97,7 @@ tasksRouter.get(
     "/onFleet/export/saveToDb",
     async (req, res) => {
       try {
-        const filter = filterTomorrowTasks();
+        const filter = tomorrowTasksFilter();
         const onFleetTasks = await onFleetGetAllTasks(filter);
         const exportedTasksIds = onFleetTasks.map((t) => t.id);
 
