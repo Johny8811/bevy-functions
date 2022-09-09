@@ -23,7 +23,7 @@ export const getAllTasks = async (params: TaskQueryParam) => {
     // @ts-ignore
     allTasks = [...allTasks, ...tasks];
 
-    logger.log(`getAllTasks - iteration ${allTasks.length}, iteration: ${iteration}`);
+    logger.log(`getAllTasks - length ${allTasks.length}, iteration: ${iteration}`);
 
     if (currentLastId && iteration <= iterationLimit ) {
       iteration++;

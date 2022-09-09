@@ -2,7 +2,7 @@ import { logger } from "firebase-functions";
 import * as express from "express";
 
 import { getAllTasks as onFleetGetAllTasks } from "../../integrations/onFleet/getAllTasks";
-import { tomorrowTasks as tomorrowTasksFilter } from "./filters/tomorrowTasks";
+import { tomorrowTasks as tomorrowTasksFilter } from "../../integrations/onFleet/filters/tomorrowTasks";
 import { generateHourlyTimeSlot } from "../utils/generateHourlyTimeSlot";
 import { filterOnFleetExportByDbTasks } from "../utils/filterOnFleetExportByDbTasks";
 import { asyncForEach } from "../../utils/asyncForEach";

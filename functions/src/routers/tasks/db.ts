@@ -1,6 +1,6 @@
 import { client } from "../../integrations/mongodb";
 import { OurOnFleetTask } from "../../types/tasks";
-import { tomorrowTasks as tomorrowTasksFilter } from "./filters/tomorrowTasks";
+import { tomorrowTasks as tomorrowTasksFilter } from "../../integrations/onFleet/filters/tomorrowTasks";
 import { add, getTime } from "date-fns";
 import { logger } from "firebase-functions";
 
