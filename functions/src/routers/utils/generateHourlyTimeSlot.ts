@@ -3,8 +3,8 @@ import { getHours, set, isBefore, add, getTime } from "date-fns";
 import { OriginOnFleetTask } from "../../types/tasks";
 
 // TODO: add tests
-export const generateHourlyTimeSlot = (taskResult: OriginOnFleetTask) => {
-  const eat = taskResult.estimatedArrivalTime;
+export const generateHourlyTimeSlot = (task: OriginOnFleetTask) => {
+  const eat = task.estimatedArrivalTime;
 
   if (eat) {
     const eatHour = getHours(eat);
