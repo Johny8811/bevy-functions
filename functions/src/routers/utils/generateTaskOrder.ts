@@ -10,6 +10,11 @@ type GroupedByUserAndWorker = {
   }
 }
 
+const addOrderField = (task: OriginOnFleetTask, order?: number) => ({
+  ...task,
+  order,
+});
+
 export const generateOrderForTasks = (onFleetTasks: OriginOnFleetTask[]) => {
   const helperTasks: HelperTask[] = onFleetTasks
       .map(({ id, worker, estimatedArrivalTime, metadata }) => ({
@@ -37,15 +42,14 @@ export const generateOrderForTasks = (onFleetTasks: OriginOnFleetTask[]) => {
 
     if (userId && worker) {
       const workerTasks = groupedByUserAndWorker[userId][worker];
-      const taskIndex = workerTasks ? workerTasks.findIndex((t) => t.id === onFleetTask.id) + 1 : null;
+      const taskIndex = workerTasks?.findIndex((t) => t.id === onFleetTask.id) + 1;
 
-      return {
-        ...onFleetTask,
-        order: taskIndex,
-      };
+      return addOrderField(
+          onFleetTask,
+          taskIndex,
+      );
     }
 
-    // TODO: create util for this and use it above too
-    return { ...onFleetTask, order: null };
+    return addOrderField(onFleetTask);
   });
 };
