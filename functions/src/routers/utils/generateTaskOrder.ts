@@ -2,6 +2,7 @@ import { groupBy } from "lodash";
 
 import { OriginOnFleetTask } from "../../types/tasks";
 import { HelperTask } from "../types";
+import { sortByWorkerAndEat } from "./sortByWorkerAndEat";
 
 type GroupedByUserAndWorker = {
   [u: string]: {
@@ -19,21 +20,12 @@ export const generateOrderForTasks = (onFleetTasks: OriginOnFleetTask[]) => {
       }))
       .filter((t): t is HelperTask =>
         t.userId && t.worker && t.estimatedArrivalTime
-      )
-      .sort((a, b) => {
-        if (a.worker && b.worker && a.estimatedArrivalTime && b.estimatedArrivalTime) {
-          const res = a.worker.localeCompare(b.worker);
-          if (res !== 0) {
-            return res;
-          }
+      );
 
-          return a.estimatedArrivalTime - b.estimatedArrivalTime;
-        }
+  // TODO: is it possible to improve typing to remove type assertions?
+  const sortedHelperTasks = sortByWorkerAndEat(helperTasks) as HelperTask[];
 
-        return 0;
-      });
-
-  const groupedByUser = groupBy(helperTasks, "userId");
+  const groupedByUser = groupBy(sortedHelperTasks, "userId");
   const groupedByUserAndWorker = Object.keys(groupedByUser).reduce<GroupedByUserAndWorker>((total, key) => ({
     ...total,
     [key]: groupBy(groupedByUser[key], "worker"),

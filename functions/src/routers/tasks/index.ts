@@ -6,6 +6,7 @@ import { tomorrowTasks as tomorrowTasksFilter } from "../../integrations/onFleet
 import { generateHourlyTimeSlot } from "../utils/generateHourlyTimeSlot";
 import { generateOrderForTasks } from "../utils/generateTaskOrder";
 import { filterOnFleetExportByDbTasks } from "../utils/filterOnFleetExportByDbTasks";
+import { sortByWorkerAndEat } from "../utils/sortByWorkerAndEat";
 import { asyncForEach } from "../../utils/asyncForEach";
 
 import {
@@ -49,7 +50,8 @@ tasksRouter.get("/", async (req, res) => {
 
     if (userId) {
       const tasks = await findTasksByDateAndUserId(date, userId);
-      res.status(200).json(tasks);
+      const sortedTasks = sortByWorkerAndEat(tasks);
+      res.status(200).json(sortedTasks);
     } else {
       const tasks = await findTasksByDate(date);
       res.status(200).json(tasks);
