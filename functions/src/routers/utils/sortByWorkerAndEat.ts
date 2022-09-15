@@ -1,5 +1,5 @@
 import { OriginOnFleetTask } from "../../types/tasks";
-import { HelperTask } from "./generateTaskOrder";
+import { HelperTask } from "../types";
 
 export const sortByWorkerAndEat = (tasks: (OriginOnFleetTask | HelperTask)[]) =>
   // we need to bypass changing origin tasks array
