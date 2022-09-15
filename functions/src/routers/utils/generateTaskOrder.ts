@@ -1,8 +1,9 @@
 import { groupBy } from "lodash";
 
-import { OriginOnFleetTask } from "../../types/tasks";
+import { OriginOnFleetTask, TaskMetadata } from "../../types/tasks";
 import { HelperTask } from "../types";
 import { sortByWorkerAndEat } from "./sortByWorkerAndEat";
+import { getMetadataValueByName } from "./getMetadataValueByName";
 
 type GroupedByUserAndWorker = {
   [u: string]: {
@@ -10,7 +11,7 @@ type GroupedByUserAndWorker = {
   }
 }
 
-const addOrderField = (task: OriginOnFleetTask, order?: number) => ({
+const addOrderField = (task: OriginOnFleetTask, order: number | null = null) => ({
   ...task,
   order,
 });
@@ -21,7 +22,7 @@ export const generateOrderForTasks = (onFleetTasks: OriginOnFleetTask[]) => {
         id,
         worker,
         estimatedArrivalTime,
-        userId: metadata.find((d) => d.name === "User ID")?.value,
+        userId: getMetadataValueByName(metadata, TaskMetadata.UserId),
       }))
       .filter((t): t is HelperTask =>
         t.userId && t.worker && t.estimatedArrivalTime
@@ -37,7 +38,7 @@ export const generateOrderForTasks = (onFleetTasks: OriginOnFleetTask[]) => {
   }), {});
 
   return onFleetTasks.map((onFleetTask) => {
-    const userId = onFleetTask.metadata.find((d) => d.name === "User ID")?.value;
+    const userId = getMetadataValueByName(onFleetTask.metadata, TaskMetadata.UserId);
     const { worker } = onFleetTask;
 
     if (userId && worker) {
