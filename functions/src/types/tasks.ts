@@ -10,3 +10,8 @@ export type OurOnFleetTask = {
 
 // TODO: investigate onFleet types, module "@onfleet/node-onfleet" has bad type coverage of onFleet api
 export type OriginOnFleetTask = UpdateTaskResult
+
+export enum TaskMetadata {
+  // TODO: rename to "userId". Here and also in whole database
+  UserId = "User ID"
+}
