@@ -70,7 +70,7 @@ export const findTomorrowTasks = () => {
   }).toArray();
 };
 
-export const updateTaskByIdMidnightFields = (task: Omit<OurOnFleetTask, "slot">) => tasksCollection.updateOne(
+export const updateTaskByIdMidnightFields = (task: Omit<OurOnFleetTask, "slot" | "order">) => tasksCollection.updateOne(
     { id: task.id },
     {
       $set: {

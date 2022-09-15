@@ -4,6 +4,7 @@ import * as express from "express";
 import { getAllTasks as onFleetGetAllTasks } from "../../integrations/onFleet/getAllTasks";
 import { tomorrowTasks as tomorrowTasksFilter } from "../../integrations/onFleet/filters/tomorrowTasks";
 import { generateHourlyTimeSlot } from "../utils/generateHourlyTimeSlot";
+import { generateOrderForTasks } from "../utils/generateTaskOrder";
 import { filterOnFleetExportByDbTasks } from "../utils/filterOnFleetExportByDbTasks";
 import { asyncForEach } from "../../utils/asyncForEach";
 
@@ -103,11 +104,13 @@ tasksRouter.get(
 
         logger.log(
             "Route:/onFleet/export/saveToDb - Prepared tasks ids for tomorrow: ",
-            exportedTasksIds
+            exportedTasksIds,
+            " count: ", exportedTasksIds.length
         );
 
         if (onFleetTasks.length > 0) {
-          const ourOnFleetTasks = onFleetTasks.map((t) => ({ ...t, slot: generateHourlyTimeSlot(t) }));
+          const tasksWithOrder = generateOrderForTasks(onFleetTasks);
+          const ourOnFleetTasks = tasksWithOrder.map((t) => ({ ...t, slot: generateHourlyTimeSlot(t) }));
           const databaseTasks = await findTasksByIDs(exportedTasksIds);
 
           const { newTasks, updatedTasks } = filterOnFleetExportByDbTasks(ourOnFleetTasks, databaseTasks);
