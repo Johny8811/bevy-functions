@@ -2,7 +2,7 @@ import { groupBy } from "lodash";
 
 import { OriginOnFleetTask } from "../../types/tasks";
 
-type HelperTask = {
+export type HelperTask = {
   id: string;
   userId: string;
   worker: string;
