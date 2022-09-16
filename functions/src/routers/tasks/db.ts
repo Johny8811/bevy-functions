@@ -30,11 +30,14 @@ export const findTasksByIDs = (ids: string[]) => tasksCollection
     })
     .toArray();
 
-export const findTasksByDate = (date: string) => {
-  const completeAfterAfter = getTime(new Date(date));
-  const completeBeforeBefore = getTime(add(completeAfterAfter, { days: 1 }));
+export const findTasksByDateRage = (completeAfter: string, completeBefore?: string) => {
+  const completeAfterAfter = getTime(new Date(completeAfter));
+  const completeBeforeBefore = getTime(completeBefore ?
+    new Date(completeBefore) :
+    add(completeAfterAfter, { days: 1 })
+  );
 
-  logger.log("tasksDb:getTasksByDate: ", { date, completeAfterAfter, completeBeforeBefore });
+  logger.log("tasksDb:getTasksByDate: ", { completeAfter, completeBefore, completeAfterAfter, completeBeforeBefore });
 
   return tasksCollection.find({
     completeAfter: { $gt: completeAfterAfter },

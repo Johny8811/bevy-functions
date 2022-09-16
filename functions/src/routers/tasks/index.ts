@@ -13,7 +13,7 @@ import {
   insertTasks,
   updateTask,
   findTasksByIDs,
-  findTasksByDate,
+  findTasksByDateRage,
   findTasksByDateAndUserId,
   findTomorrowTasks,
 } from "./db";
@@ -26,7 +26,8 @@ export const tasksRouter = express.Router();
  *
  * @typedef {object} getTasksRequestQuery
  * @property {string} userId id of logged user
- * @property {number} date the date for which the data will be obtained
+ * @property {string} completeAfter the date after which tasks should be completed
+ * @property {string} completeBefore the date before which tasks should be completed
  *
  * @param {import('express').Request<{}, {}, {}, showRequestQuery>} req
  * @param {import('express').Response} res
@@ -35,25 +36,26 @@ export const tasksRouter = express.Router();
 tasksRouter.get("/", async (req, res) => {
   logger.log("Route:/ - route query parameters: ", req.query);
 
+  const completeAfter = req.query?.completeAfter && String(req.query?.completeAfter);
+  const completeBefore = req.query?.completeBefore && String(req.query?.completeBefore);
   const userId = req.query?.userId && String(req.query?.userId);
-  const date = req.query?.date && String(req.query?.date);
 
   try {
-    if (!date) {
+    if (!completeAfter) {
       res.status(400).json({
         error: {
-          message: "Missing route query parameters 'date'",
+          message: "Missing route query parameters 'completeAfter'",
         },
       });
       return;
     }
 
     if (userId) {
-      const tasks = await findTasksByDateAndUserId(date, userId);
+      const tasks = await findTasksByDateAndUserId(completeAfter, userId);
       const sortedTasks = sortByWorkerAndEat(tasks);
       res.status(200).json(sortedTasks);
     } else {
-      const tasks = await findTasksByDate(date);
+      const tasks = await findTasksByDateRage(completeAfter, completeBefore);
       res.status(200).json(tasks);
     }
   } catch (e) {
