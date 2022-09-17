@@ -1,9 +1,16 @@
 import { Request, Response, NextFunction } from "express";
 import { logger } from "firebase-functions";
-import { firebaseAdmin } from "../integrations/firebase/index";
+
+import { firebaseAdmin } from "../integrations/firebase";
+import { DEVELOPMENT } from "../constants";
 
 // source: https://github.com/firebase/functions-samples/tree/main/authorized-https-endpoint
 export const authorizeUser = async (req: Request, res: Response, next: NextFunction) => {
+  if (DEVELOPMENT) {
+    next();
+    return;
+  }
+
   logger.log("authorizeUser: Check if request is authorized with Firebase ID token");
 
   if (!req.headers.authorization || !req.headers.authorization.startsWith("Bearer ")) {
