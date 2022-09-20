@@ -5,6 +5,7 @@ import { getAllTasks as onFleetGetAllTasks } from "../integrations/onFleet/getAl
 import { todayTasks as todayTasksFilter } from "../integrations/onFleet/filters/todayTasks";
 import { onFleetApi } from "../integrations/onFleet";
 
+// TODO: maybe separate into more independent functions
 export const midnightTasksUpdate = async () => {
   try {
     const filter = todayTasksFilter();

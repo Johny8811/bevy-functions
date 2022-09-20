@@ -113,9 +113,9 @@ tasksRouter.get(
         );
 
         if (onFleetTasks.length > 0) {
+          const databaseTasks = await findTasksByIDs(exportedTasksIds);
           const tasksWithOrder = generateOrderForTasks(onFleetTasks);
           const ourOnFleetTasks = tasksWithOrder.map((t) => ({ ...t, slot: generateHourlyTimeSlot(t) }));
-          const databaseTasks = await findTasksByIDs(exportedTasksIds);
 
           const { newTasks, updatedTasks } = filterOnFleetExportByDbTasks(ourOnFleetTasks, databaseTasks);
 
@@ -128,6 +128,7 @@ tasksRouter.get(
             await insertTasks(newTasks);
           }
 
+          // TODO: Promise.all
           if (updatedTasks.length > 0) {
             await asyncForEach(updatedTasks, async (task) => {
               await updateTask(task);
