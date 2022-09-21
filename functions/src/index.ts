@@ -27,7 +27,7 @@ export const midnightTasksUpdateJob = pubsub
     .schedule("59 23 * * *")
     .timeZone("Europe/Prague")
     .onRun((context) => {
-      logger.log("midnightTasksUpdateJob:context timestamp", context);
+      logger.log("midnightTasksUpdateJob:context ", context);
 
       updateTaskCompletionAndWorker();
       updateRdtInOnFleet();
