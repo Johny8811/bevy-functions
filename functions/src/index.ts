@@ -7,7 +7,8 @@ import helmet from "helmet";
 import { authorizeUser } from "./middleware/authorizeUser";
 import { tasksRouter } from "./routers/tasks";
 import { updateUserInfo } from "./routers/user";
-import { midnightTasksUpdate } from "./scheduled/midnightTasksUpdate";
+import { updateTaskCompletionAndWorker } from "./scheduled/updateTaskCompletionAndWorker";
+import { updateRdtInOnFleet } from "./scheduled/updateRdtInOnFleet";
 
 const app = express();
 app.use(helmet());
@@ -27,6 +28,9 @@ export const midnightTasksUpdateJob = pubsub
     .timeZone("Europe/Prague")
     .onRun((context) => {
       logger.log("midnightTasksUpdateJob:context timestamp", context);
-      midnightTasksUpdate();
+
+      updateTaskCompletionAndWorker();
+      updateRdtInOnFleet();
+
       return null;
     });
