@@ -2,9 +2,9 @@ import { logger } from "firebase-functions";
 
 import { todayTasks } from "../integrations/onFleet/filters/todayTasks";
 import { getAllTasks } from "../integrations/onFleet/getAllTasks";
-import { updateTaskByIdMidnightFields } from "../routers/tasks/db";
+import { updateCompletionAndWorkerByTaskId } from "../routers/tasks/db";
 
-export const updateTaskCompletionAndWorker = async (initTimestamp: number) => {
+export const updateCompletionAndWorker = async (initTimestamp: number) => {
   try {
     const filter = todayTasks(initTimestamp);
     const onFleetTasks = await getAllTasks(filter);
@@ -13,7 +13,7 @@ export const updateTaskCompletionAndWorker = async (initTimestamp: number) => {
     logger.log("updateTaskCompletionAndWorker:exportedTasksIds: ", exportedTasksIds);
 
     const updateResult = await Promise.all(onFleetTasks.map((task) =>
-      updateTaskByIdMidnightFields(task)
+      updateCompletionAndWorkerByTaskId(task)
     ));
 
     const matchedCount = updateResult.map((r) => r.matchedCount);

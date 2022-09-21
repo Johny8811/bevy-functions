@@ -8,7 +8,7 @@ import { getTime } from "date-fns";
 import { authorizeUser } from "./middleware/authorizeUser";
 import { tasksRouter } from "./routers/tasks";
 import { updateUserInfo } from "./routers/user";
-import { updateTaskCompletionAndWorker } from "./scheduled/updateTaskCompletionAndWorker";
+import { updateCompletionAndWorker } from "./scheduled/updateCompletionAndWorker";
 import { updateRdtInOnFleet } from "./scheduled/updateRdtInOnFleet";
 
 const app = express();
@@ -31,7 +31,7 @@ export const midnightTasksUpdateJob = pubsub
       logger.log("midnightTasksUpdateJob:context ", context);
 
       const timestamp = getTime(new Date(context.timestamp));
-      updateTaskCompletionAndWorker(timestamp);
+      updateCompletionAndWorker(timestamp);
       updateRdtInOnFleet(timestamp);
 
       return null;
