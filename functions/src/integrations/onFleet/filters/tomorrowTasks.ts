@@ -2,11 +2,23 @@ import { add, sub, getTime, set } from "date-fns";
 import { TaskQueryParam } from "@onfleet/node-onfleet/Resources/Tasks";
 import { logger } from "firebase-functions";
 
-export const tomorrowTasks = (): Pick<
+/**
+ * Return query parameters to get tasks for tomorrow
+ *
+ * @param {number} initTimestamp - use, when is needed to ensure call method with specific time
+ *
+ * @typedef {Object} Params
+ * @property {number} from - Tasks created from
+ * @property {number} completeAfterAfter - Tasks that should be complete after this time
+ * @property {number} completeBeforeBefore - Tasks that should be complete before this time
+ *
+ * @return {Params}
+ */
+export const tomorrowTasks = (initTimestamp?: number): Pick<
   TaskQueryParam,
   "from" | "completeAfterAfter" | "completeBeforeBefore"
   > => {
-  const today = set(new Date(), {
+  const today = set(initTimestamp || new Date(), {
     hours: 0,
     minutes: 0,
     seconds: 0,
