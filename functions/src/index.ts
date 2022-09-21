@@ -3,6 +3,7 @@ import "dotenv/config";
 import express from "express";
 import cors from "cors";
 import helmet from "helmet";
+import { getTime } from "date-fns";
 
 import { authorizeUser } from "./middleware/authorizeUser";
 import { tasksRouter } from "./routers/tasks";
@@ -29,8 +30,9 @@ export const midnightTasksUpdateJob = pubsub
     .onRun((context) => {
       logger.log("midnightTasksUpdateJob:context ", context);
 
-      updateTaskCompletionAndWorker();
-      updateRdtInOnFleet();
+      const timestamp = getTime(new Date(context.timestamp));
+      updateTaskCompletionAndWorker(timestamp);
+      updateRdtInOnFleet(timestamp);
 
       return null;
     });

@@ -4,9 +4,9 @@ import { todayTasks } from "../integrations/onFleet/filters/todayTasks";
 import { getAllTasks } from "../integrations/onFleet/getAllTasks";
 import { updateTaskByIdMidnightFields } from "../routers/tasks/db";
 
-export const updateTaskCompletionAndWorker = async () => {
+export const updateTaskCompletionAndWorker = async (initTimestamp: number) => {
   try {
-    const filter = todayTasks();
+    const filter = todayTasks(initTimestamp);
     const onFleetTasks = await getAllTasks(filter);
     const exportedTasksIds = onFleetTasks.map((t) => t.id);
 
