@@ -5,9 +5,9 @@ import { getAllTasks as onFleetGetAllTasks } from "../../integrations/onFleet/ge
 import { tomorrowTasks as tomorrowTasksFilter } from "../../integrations/onFleet/filters/tomorrowTasks";
 import { generateHourlyTimeSlot } from "../utils/generateHourlyTimeSlot";
 import { generateOrderForTasks } from "../utils/generateTaskOrder";
+import { asyncForEach } from "../../utils/asyncForEach";
 import { filterOnFleetExportByDbTasks } from "../utils/filterOnFleetExportByDbTasks";
 import { sortByWorkerAndEat } from "../utils/sortByWorkerAndEat";
-import { asyncForEach } from "../../utils/asyncForEach";
 
 import {
   insertTasks,

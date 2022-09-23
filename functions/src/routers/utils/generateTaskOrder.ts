@@ -42,12 +42,13 @@ export const generateOrderForTasks = (onFleetTasks: OriginOnFleetTask[]) => {
     const { worker } = onFleetTask;
 
     if (userId && worker) {
-      const workerTasks = groupedByUserAndWorker[userId][worker];
-      const taskIndex = workerTasks?.findIndex((t) => t.id === onFleetTask.id) + 1;
+      const workersTasksMap = groupedByUserAndWorker[userId];
+      const workerTasks = workersTasksMap && workersTasksMap[worker];
+      const taskIndex = workerTasks?.findIndex((t) => t.id === onFleetTask.id);
 
       return addOrderField(
           onFleetTask,
-          taskIndex,
+          taskIndex ? taskIndex + 1 : null,
       );
     }
 
