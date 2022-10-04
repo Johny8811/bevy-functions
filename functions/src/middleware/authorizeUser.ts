@@ -2,11 +2,12 @@ import { Request, Response, NextFunction } from "express";
 import { logger } from "firebase-functions";
 
 import { firebaseAdmin } from "../integrations/firebase";
-import { DEVELOPMENT } from "../constants";
+import { SKIP_AUTH } from "../constants";
+
 
 // source: https://github.com/firebase/functions-samples/tree/main/authorized-https-endpoint
 export const authorizeUser = async (req: Request, res: Response, next: NextFunction) => {
-  if (DEVELOPMENT) {
+  if (SKIP_AUTH) {
     next();
     return;
   }

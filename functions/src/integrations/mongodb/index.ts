@@ -2,10 +2,8 @@ import { logger } from "firebase-functions";
 import { MongoClient, ServerApiVersion } from "mongodb";
 
 import { getEnvVariableOrExit } from "../../utils/getEnvVariableOrExit";
-import { DEVELOPMENT } from "../../constants";
 
-// TODO: implement dev flag to change mongo URI
-const mongoUri = getEnvVariableOrExit(DEVELOPMENT ? "MONGO_URI_DEV" : "MONGO_URI_PROD");
+const mongoUri = getEnvVariableOrExit("MONGO_URI");
 
 export const client = new MongoClient(mongoUri, {
   // FIXME: ts doesn't know some props of mongo client
