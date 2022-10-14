@@ -42,11 +42,7 @@ tasksRouter.get("/", async (req, res) => {
 
   try {
     if (!completeAfter) {
-      res.status(400).json({
-        error: {
-          message: "Missing route query parameters 'completeAfter'",
-        },
-      });
+      res.status(400).json({ message: "Missing route query parameters 'completeAfter'" });
       return;
     }
 
@@ -62,11 +58,7 @@ tasksRouter.get("/", async (req, res) => {
     // TODO: improve error handling and logging
     //  https://kentcdodds.com/blog/get-a-catch-block-error-message-with-typescript
     logger.log("Route:/ - Error: ", e);
-    res.status(500).json({
-      error: {
-        message: (e as Error).message,
-      },
-    });
+    res.status(500).json({ message: (e as Error).message });
   }
 });
 
@@ -87,11 +79,7 @@ tasksRouter.get("/tomorrow", async (req, res) => {
     // TODO: improve error handling and logging
     //  https://kentcdodds.com/blog/get-a-catch-block-error-message-with-typescript
     logger.log("Route:/tomorrow - Error: ", e);
-    res.status(500).json({
-      error: {
-        message: (e as Error).message,
-      },
-    });
+    res.status(500).json({ message: (e as Error).message });
   }
 });
 
@@ -143,11 +131,7 @@ tasksRouter.get(
       // TODO: improve error handling and logging
       //  https://kentcdodds.com/blog/get-a-catch-block-error-message-with-typescript
         logger.log("Route:/onFleet/export/saveToDb - Error: ", e);
-        res.status(500).json({
-          error: {
-            message: (e as Error).message,
-          },
-        });
+        res.status(500).json({ message: (e as Error).message });
       }
     },
 );
