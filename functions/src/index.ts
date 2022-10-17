@@ -1,4 +1,4 @@
-import { https, pubsub, logger } from "firebase-functions";
+import { https, logger, pubsub } from "firebase-functions";
 import "dotenv/config";
 import express from "express";
 import cors from "cors";

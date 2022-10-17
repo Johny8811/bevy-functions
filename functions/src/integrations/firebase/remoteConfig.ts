@@ -1,11 +1,9 @@
 import { logger } from "firebase-functions";
 
 import { firebaseAdmin } from "./index";
+import { RemoteConfigParameters, ROLES } from "./types";
 
-export enum RemoteConfigParameters {
-  USERS_ROLES = "usersRoles"
-}
-
+// TODO: use "userClaims" for roles system
 export const getValueByParameterName = async (name: RemoteConfigParameters) => {
   try {
     const config = firebaseAdmin.remoteConfig();
@@ -18,13 +16,23 @@ export const getValueByParameterName = async (name: RemoteConfigParameters) => {
       return;
     }
 
-    return {
-      value: (parameter.defaultValue as { value: string }).value,
-    };
+    return (parameter.defaultValue as { value: string }).value;
   } catch (err) {
     logger.error("Remote config: Unable to get template");
     logger.error(err);
 
     return;
   }
+};
+
+export const hasRole = (roles: ROLES[], role: ROLES) => {
+  if (roles) {
+    if (role === "user" && roles.length === 0) {
+      return true;
+    }
+
+    return roles.includes(role);
+  }
+
+  return false;
 };
