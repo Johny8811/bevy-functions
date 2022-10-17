@@ -22,14 +22,14 @@ export const tasksRouter = express.Router();
 
 // https://stackoverflow.com/questions/57771798/how-do-i-jsdoc-parameters-to-web-request
 /**
- * Get tasks by "date" || "date & usedId"
+ * Get tasks by "date" || "date & userId"
  *
  * @typedef {object} getTasksRequestQuery
  * @property {string} userId id of logged user
  * @property {string} completeAfter the date after which tasks should be completed
  * @property {string} completeBefore the date before which tasks should be completed
  *
- * @param {import('express').Request<{}, {}, {}, showRequestQuery>} req
+ * @param {import('express').Request<{}, {}, {}, getTasksRequestQuery>} req
  * @param {import('express').Response} res
  */
 // TODO: only "user" & "root" role should have possibility to call this route

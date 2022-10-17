@@ -16,6 +16,6 @@ export const client = new MongoClient(mongoUri, {
 
 client.connect((err) => {
   if (err) {
-    logger.log("MongoDB:connectionError ", err);
+    logger.error("MongoDB:connectionError ", err);
   }
 });
