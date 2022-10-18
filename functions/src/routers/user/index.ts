@@ -4,6 +4,7 @@ import { firebaseAdmin } from "../../integrations/firebase";
 import { logger } from "firebase-functions";
 
 // TODO: correctly type Request, Response
+//  route has to be under role access
 export const updateUserInfo = async (req: Request, res: Response) => {
   logger.log("Route:/user/update - : ", req.body);
 
