@@ -20,6 +20,7 @@ export const authorizeUser = async (req: Request, res: Response, next: NextFunct
         Make sure you authorize your request by providing the following HTTP header:
         Authorization: Bearer <Firebase ID Token>.`
     );
+
     res.status(403).json({ message: "Unauthorized" });
     return;
   }
@@ -27,6 +28,7 @@ export const authorizeUser = async (req: Request, res: Response, next: NextFunct
   let idToken;
   if (req.headers.authorization && req.headers.authorization.startsWith("Bearer ")) {
     logger.log("authorizeUser: Found 'Authorization' header");
+
     idToken = req.headers.authorization.split("Bearer ")[1];
   } else {
     res.status(403).json({ message: "Unauthorized" });
@@ -35,15 +37,15 @@ export const authorizeUser = async (req: Request, res: Response, next: NextFunct
 
   try {
     const decodedIdToken = await firebaseAdmin.auth().verifyIdToken(idToken);
+
     logger.log("authorizeUser: ID Token correctly decoded", decodedIdToken);
-    // FIXME: type correctly, see "src/types/custom.d.ts" - "decodedIdToken" come from firebase-admin
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
+
     req.user = decodedIdToken;
     next();
     return;
   } catch (error) {
     logger.error("authorizeUser: Error while verifying Firebase ID token:", error);
+
     res.status(403).json({ message: "Unauthorized" });
     return;
   }

@@ -1,5 +1,6 @@
 {
   "include": [
     ".eslintrc.js"
-  ]
+  ],
+  "files": ["./src/types/custom.d.ts"]
 }
