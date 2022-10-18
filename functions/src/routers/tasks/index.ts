@@ -92,30 +92,9 @@ tasksRouter.get("/", async (req, res) => {
 });
 
 /**
- * @deprecated
- * Get tasks planned for next day - dispatcher role route
- */
-tasksRouter.get("/tomorrow", async (req, res) => {
-  try {
-    const tasks = await findTomorrowTasks();
-
-    logger.log(
-        "Route:/tomorrow - Prepared tasks ids for next day: ",
-        tasks.map((task) => task.id)
-    );
-
-    res.status(200).json(tasks);
-  } catch (e) {
-    // TODO: improve error handling and logging
-    //  https://kentcdodds.com/blog/get-a-catch-block-error-message-with-typescript
-    logger.log("Route:/tomorrow - Error: ", e);
-    res.status(500).json({ message: (e as Error).message });
-  }
-});
-
-/**
  * Fetch tasks from onFleet planned for next day and save them to our database
  */
+// TODO: also this route has to be under role access
 tasksRouter.get(
     "/onFleet/export/saveToDb",
     async (req, res) => {
