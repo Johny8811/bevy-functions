@@ -27,7 +27,6 @@ export const tasksRouter = express.Router();
  * Get tasks by "date" || "date & userId"
  *
  * @typedef {object} getTasksRequestQuery
- * @property {string} userId id of logged user
  * @property {string} completeAfter the date after which tasks should be completed
  * @property {string} completeBefore the date before which tasks should be completed
  *
@@ -40,17 +39,14 @@ tasksRouter.get("/", async (req, res) => {
 
   const completeAfter = req.query?.completeAfter && String(req.query?.completeAfter);
   const completeBefore = req.query?.completeBefore && String(req.query?.completeBefore);
-  const userId = req.query?.userId && String(req.query?.userId);
+  const userId = req.user.uid;
 
   try {
-    if (!userId) {
-      res.status(400).json({ message: "Missing route query parameters 'userId'" });
-      return;
-    }
-
     const usersRolesStr = await getValueByParameterName(RemoteConfigParameters.USERS_ROLES);
     const usersRoles = usersRolesStr ? JSON.parse(usersRolesStr) : {};
     const roles = usersRoles[userId];
+
+    logger.log("Route:/ - user roles: ", roles);
 
     if (hasRole(roles, "dispatcher")) {
       const tasks = await findTomorrowTasks();
