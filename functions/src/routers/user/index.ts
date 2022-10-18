@@ -13,11 +13,7 @@ export const updateUserInfo = async (req: Request, res: Response) => {
   const photoURL = bodyParsed.photoURL;
 
   if (!userId) {
-    res.status(400).json({
-      error: {
-        message: "Missing body parameter 'userId'",
-      },
-    });
+    res.status(400).json({ message: "Missing body parameter 'userId'" });
     return;
   }
 
@@ -32,10 +28,6 @@ export const updateUserInfo = async (req: Request, res: Response) => {
     // TODO: improve error handling and logging
     //  https://kentcdodds.com/blog/get-a-catch-block-error-message-with-typescript
     logger.log("Route:/user/update - Error: ", e);
-    res.status(500).json({
-      error: {
-        message: (e as Error).message,
-      },
-    });
+    res.status(500).json({ message: (e as Error).message });
   }
 };
