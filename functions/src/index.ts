@@ -6,8 +6,8 @@ import helmet from "helmet";
 import { getTime } from "date-fns";
 
 import { authorizeUser } from "./middleware/authorizeUser";
-import { tasksRouter } from "./routers/tasks";
-import { updateUserInfo } from "./routers/user";
+import { tasksRouter } from "./routes/tasks";
+import { updateUserInfo } from "./routes/user";
 import { updateCompletionAndWorker } from "./scheduled/updateCompletionAndWorker";
 import { updateRdtInOnFleet } from "./scheduled/updateRdtInOnFleet";
 

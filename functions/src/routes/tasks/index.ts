@@ -88,7 +88,7 @@ tasksRouter.get("/", async (req, res) => {
 });
 
 /**
- * Fetch tasks from onFleet planned for next day and save them to our database
+ * Fetch tasks from onFleet planned for next day and save them to tasks database
  */
 // TODO: route has to be under role access
 tasksRouter.get(

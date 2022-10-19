@@ -2,7 +2,7 @@ import { logger } from "firebase-functions";
 
 import { todayTasks } from "../integrations/onFleet/filters/todayTasks";
 import { getAllTasks } from "../integrations/onFleet/getAllTasks";
-import { updateCompletionAndWorkerByTaskId } from "../routers/tasks/db";
+import { updateCompletionAndWorkerByTaskId } from "../routes/tasks/db";
 
 export const updateCompletionAndWorker = async (initTimestamp: number) => {
   try {
