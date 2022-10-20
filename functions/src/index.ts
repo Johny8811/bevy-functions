@@ -1,4 +1,4 @@
-import { https, logger, pubsub } from "firebase-functions";
+import { logger, pubsub } from "firebase-functions";
 import "dotenv/config";
 import express from "express";
 import cors from "cors";
@@ -6,7 +6,7 @@ import helmet from "helmet";
 import { getTime } from "date-fns";
 
 import { authorizeUser } from "./middlewares/authorizeUser";
-import { tasksRouter } from "./routes/tasks";
+import * as tasksFunctions from "./routes/tasks";
 import * as userFunctions from "./routes/user";
 import { updateCompletionAndWorker } from "./scheduled/updateCompletionAndWorker";
 import { updateRdtInOnFleet } from "./scheduled/updateRdtInOnFleet";
@@ -17,11 +17,8 @@ app.use(cors({ origin: true }));
 app.use(express.json());
 
 app.use(authorizeUser);
-app.use(tasksRouter);
 
-// TODO: change to "tasks" to "bevy" --> route will be: tasks, user, etc.
-export const tasks = https.onRequest(app);
-
+export const tasks = tasksFunctions;
 export const user = userFunctions;
 
 export const midnightTasksUpdateJob = pubsub

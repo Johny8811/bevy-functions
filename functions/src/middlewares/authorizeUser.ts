@@ -5,6 +5,9 @@ import { firebaseAdmin } from "../integrations/firebase";
 import { SKIP_AUTH } from "../constants";
 
 
+/**
+ * // @deprecated - remove with other old code
+ */
 // source: https://github.com/firebase/functions-samples/tree/main/authorized-https-endpoint
 export const authorizeUser = async (req: Request, res: Response, next: NextFunction) => {
   if (SKIP_AUTH) {

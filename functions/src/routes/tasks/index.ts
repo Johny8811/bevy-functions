@@ -10,6 +10,8 @@ import { filterOnFleetExportByDbTasks } from "../utils/filterOnFleetExportByDbTa
 import { sortByWorkerAndEat } from "../utils/sortByWorkerAndEat";
 import { getValueByParameterName, hasRole } from "../../integrations/firebase/remoteConfig";
 import { RemoteConfigParameters } from "../../integrations/firebase/types";
+import { withMiddleware } from "../../middlewares/withMiddleware";
+import { withAuthorization } from "../../middlewares/withAuthorization";
 
 import {
   findTasksByDateAndUserId,
@@ -33,8 +35,7 @@ export const tasksRouter = express.Router();
  * @param {import('express').Request<{}, {}, {}, getTasksRequestQuery>} req
  * @param {import('express').Response} res
  */
-// TODO: only "user" & "root" role should have possibility to call this route
-tasksRouter.get("/", async (req, res) => {
+export const getTasks = withMiddleware(withAuthorization(async (req, res) => {
   logger.log("Route:/ - route query parameters: ", req.query);
 
   const completeAfter = req.query?.completeAfter && String(req.query?.completeAfter);
@@ -85,7 +86,8 @@ tasksRouter.get("/", async (req, res) => {
     logger.log("Route:/ - Error: ", e);
     res.status(500).json({ message: (e as Error).message });
   }
-});
+}));
+
 
 /**
  * Fetch tasks from onFleet planned for next day and save them to tasks database
