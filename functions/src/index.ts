@@ -5,7 +5,7 @@ import cors from "cors";
 import helmet from "helmet";
 import { getTime } from "date-fns";
 
-import { authorizeUser } from "./middleware/authorizeUser";
+import { authorizeUser } from "./middlewares/authorizeUser";
 import { tasksRouter } from "./routes/tasks";
 import { updateUserInfo } from "./routes/user";
 import { updateCompletionAndWorker } from "./scheduled/updateCompletionAndWorker";
