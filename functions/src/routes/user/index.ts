@@ -1,15 +1,15 @@
-import { Request, Response } from "express";
-
-import { firebaseAdmin } from "../../integrations/firebase";
 import { logger } from "firebase-functions";
 
-// TODO: correctly type Request, Response
-//  route has to be under role access
-export const updateUserInfo = async (req: Request, res: Response) => {
+import { firebaseAdmin } from "../../integrations/firebase";
+import { withMiddleware } from "../../middlewares/withMiddleware";
+import { withAuthorization } from "../../middlewares/withAuthorization";
+
+// TODO: function has to be under role access
+export const updateUser = withMiddleware(withAuthorization(async (req, res) => {
   logger.log("Route:/user/update - : ", req.body);
 
   const bodyParsed = JSON.parse(req.body);
-  const userId = bodyParsed.userId;
+  const userId = req.user.uid;
   const displayName = bodyParsed.displayName;
   const photoURL = bodyParsed.photoURL;
 
@@ -31,4 +31,4 @@ export const updateUserInfo = async (req: Request, res: Response) => {
     logger.log("Route:/user/update - Error: ", e);
     res.status(500).json({ message: (e as Error).message });
   }
-};
+}));

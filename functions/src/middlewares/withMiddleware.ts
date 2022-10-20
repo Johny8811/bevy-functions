@@ -1,3 +1,4 @@
+// https://gist.github.com/mediavrog/49c4f809dffea4e00738a7f5e3bbfa59?permalink_comment_id=3400965#gistcomment-3400965
 import * as functions from "firebase-functions";
 import cors from "cors";
 
