@@ -6,6 +6,7 @@ import helmet from "helmet";
 import { getTime } from "date-fns";
 
 import { authorizeUser } from "./middlewares/authorizeUser";
+import * as onFleetFunctions from "./routes/onFleet";
 import * as tasksFunctions from "./routes/tasks";
 import * as userFunctions from "./routes/user";
 import { updateCompletionAndWorker } from "./scheduled/updateCompletionAndWorker";
@@ -18,6 +19,7 @@ app.use(express.json());
 
 app.use(authorizeUser);
 
+export const onFleet = onFleetFunctions;
 export const tasks = tasksFunctions;
 export const user = userFunctions;
 
