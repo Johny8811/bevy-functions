@@ -12,6 +12,7 @@ export const onFleet = onFleetFunctions;
 export const tasks = tasksFunctions;
 export const user = userFunctions;
 
+// TODO: split into multiple functions
 export const midnightTasksUpdateJob = pubsub
     .schedule("59 23 * * *")
     .timeZone("Europe/Prague")
