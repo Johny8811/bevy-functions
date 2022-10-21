@@ -1,5 +1,4 @@
 import { logger } from "firebase-functions";
-import * as express from "express";
 
 import { sortByWorkerAndEat } from "../utils/sortByWorkerAndEat";
 import { getValueByParameterName, hasRole } from "../../integrations/firebase/remoteConfig";
@@ -12,8 +11,6 @@ import {
   findTasksByDateRage,
   findTomorrowTasks,
 } from "./db";
-
-export const tasksRouter = express.Router();
 
 // https://stackoverflow.com/questions/57771798/how-do-i-jsdoc-parameters-to-web-request
 /**
