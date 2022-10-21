@@ -3,7 +3,7 @@ import { logger } from "firebase-functions";
 import { sortByWorkerAndEat } from "../utils/sortByWorkerAndEat";
 import { getValueByParameterName, hasRole } from "../../integrations/firebase/remoteConfig";
 import { RemoteConfigParameters } from "../../integrations/firebase/types";
-import { withMiddleware } from "../../middlewares/withMiddleware";
+import { withCors } from "../../middlewares/withCors";
 import { withAuthorization } from "../../middlewares/withAuthorization";
 
 import {
@@ -23,7 +23,7 @@ import {
  * @param {import('express').Request<{}, {}, {}, getTasksRequestQuery>} req
  * @param {import('express').Response} res
  */
-export const getTasks = withMiddleware(withAuthorization(async (req, res) => {
+export const getTasks = withCors(withAuthorization(async (req, res) => {
   logger.log("Route:/ - route query parameters: ", req.query);
 
   const completeAfter = req.query?.completeAfter && String(req.query?.completeAfter);

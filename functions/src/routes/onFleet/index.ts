@@ -1,6 +1,6 @@
 import { logger } from "firebase-functions";
 
-import { withMiddleware } from "../../middlewares/withMiddleware";
+import { withCors } from "../../middlewares/withCors";
 import { withAuthorization } from "../../middlewares/withAuthorization";
 import { tomorrowTasks } from "../../integrations/onFleet/filters/tomorrowTasks";
 import { getAllTasks } from "../../integrations/onFleet/getAllTasks";
@@ -16,7 +16,7 @@ import { findTasksByIDs, insertTasks, updateTask } from "../tasks/db";
 /**
  * Fetch onFleet tasks planned for next day and save them to tasks database
  */
-export const exportTasksToDb = withMiddleware(withAuthorization(async (req, res) => {
+export const exportTasksToDb = withCors(withAuthorization(async (req, res) => {
   try {
     const filter = tomorrowTasks();
     const onFleetTasks = await getAllTasks(filter);

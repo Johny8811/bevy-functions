@@ -9,7 +9,7 @@ export type FunctionHandler = (
   res: functions.Response,
 ) => void | Promise<void>;
 
-export const withMiddleware = (
+export const withCors = (
     handler: FunctionHandler,
     regions: Parameters<typeof functions.region> | string = ["europe-west3"],
 ) =>

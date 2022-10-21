@@ -1,11 +1,11 @@
 import { logger } from "firebase-functions";
 
 import { firebaseAdmin } from "../../integrations/firebase";
-import { withMiddleware } from "../../middlewares/withMiddleware";
+import { withCors } from "../../middlewares/withCors";
 import { withAuthorization } from "../../middlewares/withAuthorization";
 
 // TODO: function has to be under role access
-export const updateUser = withMiddleware(withAuthorization(async (req, res) => {
+export const updateUser = withCors(withAuthorization(async (req, res) => {
   logger.log("Route:/user/update - : ", req.body);
 
   const bodyParsed = JSON.parse(req.body);
