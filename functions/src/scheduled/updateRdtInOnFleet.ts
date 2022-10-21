@@ -1,6 +1,6 @@
 import { logger } from "firebase-functions";
 
-import { findTasksByIDs } from "../routes/tasks/db";
+import { findTasksByIDs } from "../functions/tasks/db";
 import { onFleetApi } from "../integrations/onFleet";
 import { tomorrowTasks } from "../integrations/onFleet/filters/tomorrowTasks";
 import { getAllTasks } from "../integrations/onFleet/getAllTasks";
@@ -12,7 +12,7 @@ export const updateRdtInOnFleet = async (initTimestamp: number) => {
     const onFleetTasks = await getAllTasks(filter);
     const exportedTasksIds = onFleetTasks.map((t) => t.id);
 
-    logger.log("updateRdtInOnFleet:exportedTasksIds: ", exportedTasksIds);
+    logger.log("updateRdtInOnFleet:exportedTasksIds: ", onFleetTasks.map((t) => t.shortId));
 
     const databaseTasks = await findTasksByIDs(exportedTasksIds);
     await Promise.all(databaseTasks.map((task) =>

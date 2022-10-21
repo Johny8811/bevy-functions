@@ -1,14 +1,17 @@
-import { Request, Response, NextFunction } from "express";
-import { logger } from "firebase-functions";
+import { logger, Request, Response } from "firebase-functions";
 
 import { firebaseAdmin } from "../integrations/firebase";
 import { SKIP_AUTH } from "../constants";
 
+export type FunctionHandler = (
+  req: Request,
+  res: Response,
+) => void | Promise<void>;
 
 // source: https://github.com/firebase/functions-samples/tree/main/authorized-https-endpoint
-export const authorizeUser = async (req: Request, res: Response, next: NextFunction) => {
+export const withAuthorization = (handler: FunctionHandler) => async (req: Request, res: Response) => {
   if (SKIP_AUTH) {
-    next();
+    handler(req, res);
     return;
   }
 
@@ -41,7 +44,7 @@ export const authorizeUser = async (req: Request, res: Response, next: NextFunct
     logger.log("authorizeUser: ID Token correctly decoded", decodedIdToken);
 
     req.user = decodedIdToken;
-    next();
+    handler(req, res);
     return;
   } catch (error) {
     logger.error("authorizeUser: Error while verifying Firebase ID token:", error);

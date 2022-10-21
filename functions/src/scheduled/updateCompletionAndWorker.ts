@@ -2,13 +2,13 @@ import { logger } from "firebase-functions";
 
 import { todayTasks } from "../integrations/onFleet/filters/todayTasks";
 import { getAllTasks } from "../integrations/onFleet/getAllTasks";
-import { updateCompletionAndWorkerByTaskId } from "../routes/tasks/db";
+import { updateCompletionAndWorkerByTaskId } from "../functions/tasks/db";
 
 export const updateCompletionAndWorker = async (initTimestamp: number) => {
   try {
     const filter = todayTasks(initTimestamp);
     const onFleetTasks = await getAllTasks(filter);
-    const exportedTasksIds = onFleetTasks.map((t) => t.id);
+    const exportedTasksIds = onFleetTasks.map((t) => t.shortId);
 
     logger.log("updateTaskCompletionAndWorker:exportedTasksIds: ", exportedTasksIds);
 
