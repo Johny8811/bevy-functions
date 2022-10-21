@@ -8,7 +8,7 @@ export const updateCompletionAndWorker = async (initTimestamp: number) => {
   try {
     const filter = todayTasks(initTimestamp);
     const onFleetTasks = await getAllTasks(filter);
-    const exportedTasksIds = onFleetTasks.map((t) => t.id);
+    const exportedTasksIds = onFleetTasks.map((t) => t.shortId);
 
     logger.log("updateTaskCompletionAndWorker:exportedTasksIds: ", exportedTasksIds);
 

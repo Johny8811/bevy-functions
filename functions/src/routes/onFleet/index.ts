@@ -24,7 +24,7 @@ export const exportTasksToDb = withCors(withAuthorization(async (req, res) => {
 
     logger.log(
         "Route:/onFleet/export/saveToDb - Prepared tasks ids for tomorrow: ",
-        exportedTasksIds,
+        onFleetTasks.map((t) => t.shortId),
         " count: ", exportedTasksIds.length
     );
 
@@ -35,9 +35,9 @@ export const exportTasksToDb = withCors(withAuthorization(async (req, res) => {
 
       const { newTasks, updatedTasks } = filterOnFleetExportByDbTasks(ourOnFleetTasks, databaseTasks);
 
-      logger.log("Route:/onFleet/export/saveToDb - new tasks ids: ", newTasks.map((t) => t.id));
+      logger.log("Route:/onFleet/export/saveToDb - new tasks ids: ", newTasks.map((t) => t.shortId));
       logger.log("Route:/onFleet/export/saveToDb - updated tasks ids: ",
-          updatedTasks.map((t) => t.id)
+          updatedTasks.map((t) => t.shortId)
       );
 
       if (newTasks.length > 0) {

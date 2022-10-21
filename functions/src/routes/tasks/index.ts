@@ -39,12 +39,6 @@ export const getTasks = withCors(withAuthorization(async (req, res) => {
 
     if (hasRole(roles, "dispatcher")) {
       const tasks = await findTomorrowTasks();
-
-      logger.log(
-          "Route:/tomorrow - IDs of prepared tasks for next day: ",
-          tasks.map((task) => task.id)
-      );
-
       res.status(200).json(tasks);
       return;
     }
