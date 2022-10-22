@@ -1,3 +1,39 @@
+export type Recipient = {
+  name: string;
+  phone: string;
+  notes: string | undefined;
+  skipSMSNotifications: boolean | undefined;
+}
+
+export type Address = {
+  apartment?: string | undefined;
+  state?: string | undefined;
+  postalCode?: string | undefined;
+  country: string;
+  city: string;
+  street: string;
+  number: string;
+}
+
+export type Task = {
+  id: string;
+  recipients: Recipient[];
+  address: Address;
+  completeAfter: number | undefined;
+  completeBefore: number | undefined;
+  quantity: number | undefined;
+  estimatedArrivalTime: number
+  order: number | null;
+  slot: {
+    start: number;
+    end: number;
+  } | null;
+  deliveredAt: number | null
+}
+
+export type Tasks = Task[];
+
+// TODO: old types, remove them
 import { UpdateTaskResult } from "@onfleet/node-onfleet/Resources/Tasks";
 
 export type OurOnFleetTask = {
