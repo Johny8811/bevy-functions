@@ -2,6 +2,7 @@ import { logger } from "firebase-functions";
 
 import { withCors } from "../../middlewares/withCors";
 import { withAuthorization } from "../../middlewares/withAuthorization";
+import { onFleetApi } from "../../integrations/onFleet";
 import { tomorrowTasks } from "../../integrations/onFleet/filters/tomorrowTasks";
 import { getAllTasks } from "../../integrations/onFleet/getAllTasks";
 import { asyncForEach } from "../../utils/asyncForEach";
@@ -62,3 +63,19 @@ export const exportTasksToDb = withCors(withAuthorization(async (req, res) => {
     res.status(500).json({ message: (e as Error).message });
   }
 }));
+
+export const tasksBatchCreate = withCors(withAuthorization(async (req, res) => {
+  try {
+    const tasks = JSON.parse(req.body);
+    const result = await onFleetApi.tasks.batchCreate(tasks);
+
+    res.status(201).json(result);
+  } catch (e) {
+    // TODO: improve error handling and logging
+    //  https://kentcdodds.com/blog/get-a-catch-block-error-message-with-typescript
+    logger.log("Route:/onFleet/export/saveToDb - Error: ", e);
+    res.status(500).json({ message: (e as Error).message });
+  }
+}));
+
+
