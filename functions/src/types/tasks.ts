@@ -33,7 +33,7 @@ export type Task = {
 
 export type Tasks = Task[];
 
-// TODO: old types, remove them
+// TODO: old types, investigate usage, then remove them
 import { UpdateTaskResult } from "@onfleet/node-onfleet/Resources/Tasks";
 
 export type OurOnFleetTask = {

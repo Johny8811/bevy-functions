@@ -26,8 +26,8 @@ import {
 export const getTasks = withCors(withAuthorization(async (req, res) => {
   logger.log("Route:/ - route query parameters: ", req.query);
 
-  const completeAfter = req.query?.completeAfter && String(req.query?.completeAfter);
-  const completeBefore = req.query?.completeBefore && String(req.query?.completeBefore);
+  const completeAfter = req.query.completeAfter && String(req.query.completeAfter);
+  const completeBefore = req.query.completeBefore && String(req.query.completeBefore);
   const userId = req.user.uid;
 
   try {
