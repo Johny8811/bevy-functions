@@ -64,6 +64,12 @@ export const exportTasksToDb = withCors(withAuthorization(async (req, res) => {
   }
 }));
 
+/**
+ * Create tasks in batch
+ *
+ * body:
+ * - tasks - array of objects of tasks, that will be created
+ */
 export const tasksBatchCreate = withCors(withAuthorization(async (req, res) => {
   try {
     const tasks = JSON.parse(req.body);
@@ -78,4 +84,24 @@ export const tasksBatchCreate = withCors(withAuthorization(async (req, res) => {
   }
 }));
 
+/**
+ * Get list of workers
+ *
+ * queryParams:
+ * - filter - A comma-separated list of fields to return, if all are not desired.
+ */
+export const getWorkers = withCors(withAuthorization(async (req, res) => {
+  try {
+    const filter = req.query.filter && String(req.query.filter);
 
+    const result = await onFleetApi.workers.get("", {
+      filter,
+    });
+    res.status(200).json(result);
+  } catch (e) {
+    // TODO: improve error handling and logging
+    //  https://kentcdodds.com/blog/get-a-catch-block-error-message-with-typescript
+    logger.log("Route:/onFleet/export/saveToDb - Error: ", e);
+    res.status(500).json({ message: (e as Error).message });
+  }
+}));
