@@ -5,7 +5,6 @@ import { withAuthorization } from "../../middlewares/withAuthorization";
 import { onFleetApi } from "../../integrations/onFleet";
 import { tomorrowTasks } from "../../integrations/onFleet/filters/tomorrowTasks";
 import { getAllTasks } from "../../integrations/onFleet/getAllTasks";
-import { asyncForEach } from "../../utils/asyncForEach";
 
 import { generateOrderForTasks } from "../utils/generateTaskOrder";
 import { filterOnFleetExportByDbTasks } from "../utils/filterOnFleetExportByDbTasks";
@@ -45,11 +44,8 @@ export const exportTasksToDb = withCors(withAuthorization(async (req, res) => {
         await insertTasks(newTasks);
       }
 
-      // TODO: Promise.all
       if (updatedTasks.length > 0) {
-        await asyncForEach(updatedTasks, async (task) => {
-          await updateTask(task);
-        });
+        await Promise.all(updatedTasks.map((task) => updateTask(task)));
       }
 
       res.status(200).json(ourOnFleetTasks);
