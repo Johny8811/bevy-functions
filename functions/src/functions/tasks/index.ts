@@ -1,16 +1,20 @@
 import { logger } from "firebase-functions";
+import { OnfleetMetadata } from "@onfleet/node-onfleet/metadata";
 
-import { sortByWorkerAndEat } from "../utils/sortByWorkerAndEat";
 import { getValueByParameterName, hasRole } from "../../integrations/firebase/remoteConfig";
 import { RemoteConfigParameters } from "../../integrations/firebase/types";
+import { TaskMetadata } from "../../types/tasks";
 import { withCors } from "../../middlewares/withCors";
 import { withAuthorization } from "../../middlewares/withAuthorization";
+import { sortByWorkerAndEat } from "../utils/sortByWorkerAndEat";
+import { mapTaskDataToCreateTasksProps } from "../utils/mapTasksToCreateTasksProps";
 
 import {
   findTasksByDateAndUserId,
   findTasksByDateRage,
   findTomorrowTasks,
 } from "./db";
+import { onFleetApi } from "../../integrations/onFleet";
 
 // https://stackoverflow.com/questions/57771798/how-do-i-jsdoc-parameters-to-web-request
 /**
@@ -66,6 +70,37 @@ export const getTasks = withCors(withAuthorization(async (req, res) => {
     // TODO: improve error handling and logging
     //  https://kentcdodds.com/blog/get-a-catch-block-error-message-with-typescript
     logger.log("Route:/ - Error: ", e);
+    res.status(500).json({ message: (e as Error).message });
+  }
+}));
+
+/**
+ * Create tasks in batch in some fleet system , e.g. OnFleet
+ *
+ * body:
+ * - tasks - array of objects of tasks, that will be created
+ */
+export const batchCreate = withCors(withAuthorization(async (req, res) => {
+  try {
+    const tasks = JSON.parse(req.body);
+
+    const metadata: OnfleetMetadata[] = [
+      {
+        name: TaskMetadata.UserId,
+        type: "string",
+        visibility: ["api"],
+        value: req.user.uid,
+      },
+    ];
+
+    const createTasksProps = mapTaskDataToCreateTasksProps(tasks, metadata);
+    const result = await onFleetApi.tasks.batchCreate(createTasksProps);
+
+    res.status(201).json(result);
+  } catch (e) {
+    // TODO: improve error handling and logging
+    //  https://kentcdodds.com/blog/get-a-catch-block-error-message-with-typescript
+    logger.log("Route:/onFleet/export/saveToDb - Error: ", e);
     res.status(500).json({ message: (e as Error).message });
   }
 }));
