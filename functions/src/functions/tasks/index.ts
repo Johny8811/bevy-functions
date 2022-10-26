@@ -28,7 +28,7 @@ import { onFleetApi } from "../../integrations/onFleet";
  * @param {import('express').Response} res
  */
 export const getTasks = withCors(withAuthorization(async (req, res) => {
-  logger.log("Route:/ - route query parameters: ", req.query);
+  logger.log("tasks-getTasks - query parameters: ", req.query);
 
   const completeAfter = req.query.completeAfter && String(req.query.completeAfter);
   const completeBefore = req.query.completeBefore && String(req.query.completeBefore);
@@ -39,7 +39,7 @@ export const getTasks = withCors(withAuthorization(async (req, res) => {
     const usersRoles = usersRolesStr ? JSON.parse(usersRolesStr) : {};
     const roles = usersRoles[userId];
 
-    logger.log("Route:/ - user roles: ", roles);
+    logger.log("tasks-getTasks - user roles: ", roles);
 
     if (hasRole(roles, "dispatcher")) {
       const tasks = await findTomorrowTasks();
@@ -69,7 +69,7 @@ export const getTasks = withCors(withAuthorization(async (req, res) => {
   } catch (e) {
     // TODO: improve error handling and logging
     //  https://kentcdodds.com/blog/get-a-catch-block-error-message-with-typescript
-    logger.log("Route:/ - Error: ", e);
+    logger.log("tasks-getTasks - Error: ", e);
     res.status(500).json({ message: (e as Error).message });
   }
 }));
@@ -94,13 +94,15 @@ export const batchCreate = withCors(withAuthorization(async (req, res) => {
     ];
 
     const createTasksProps = mapTaskDataToCreateTasksProps(tasks, metadata);
-    const result = await onFleetApi.tasks.batchCreate(createTasksProps);
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    const result = await onFleetApi.tasks.batchCreate({ tasks: createTasksProps });
 
     res.status(201).json(result);
   } catch (e) {
     // TODO: improve error handling and logging
     //  https://kentcdodds.com/blog/get-a-catch-block-error-message-with-typescript
-    logger.log("Route:/onFleet/export/saveToDb - Error: ", e);
+    logger.log("tasks-batchCreate: ", e);
     res.status(500).json({ message: (e as Error).message });
   }
 }));

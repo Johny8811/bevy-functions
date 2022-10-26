@@ -18,7 +18,7 @@ export type Address = {
 export type Task = {
   id: string;
   recipients: Recipient[];
-  address: Address;
+  destination: { address: Address };
   completeAfter: number | undefined;
   completeBefore: number | undefined;
   quantity: number | undefined;

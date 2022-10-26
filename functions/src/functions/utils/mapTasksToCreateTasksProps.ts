@@ -9,7 +9,7 @@ export const mapTaskDataToCreateTasksProps = (
   return tasks.map((task) => {
     const {
       recipients,
-      address,
+      destination: { address },
       completeAfter,
       completeBefore,
       quantity,
