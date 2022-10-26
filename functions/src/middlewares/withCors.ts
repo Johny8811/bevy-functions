@@ -11,7 +11,7 @@ export type FunctionHandler = (
 
 export const withCors = (
     handler: FunctionHandler,
-    regions: Parameters<typeof functions.region> | string = ["europe-west3"],
+    regions: Parameters<typeof functions.region> = ["europe-west3"],
 ) =>
   functions.region(...regions).https.onRequest((req, res) =>
     corsMiddleware(req, res, () => {
