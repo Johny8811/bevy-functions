@@ -1,3 +1,5 @@
+import { convertStringToDataType } from "./convertStringToDataType";
+
 // TODO: add test
 export const csvToJSON = (data: string, delimiter = ",") => {
   const titles = data.slice(0, data.indexOf("\n")).split(delimiter);
@@ -6,8 +8,8 @@ export const csvToJSON = (data: string, delimiter = ",") => {
       .split("\n")
       .map((v) => {
         const values = v.split(delimiter);
-        return titles.reduce<{ [key:string]: string }>(
-            (obj, title, index) => ((obj[title] = values[index]), obj),
+        return titles.reduce<{ [key:string]: ReturnType<typeof convertStringToDataType> }>(
+            (obj, title, index) => ((obj[title] = convertStringToDataType(values[index])), obj),
             {}
         );
       });
