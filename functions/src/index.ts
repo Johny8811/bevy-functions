@@ -15,7 +15,9 @@ export const tasks = tasksFunctions;
 export const user = userFunctions;
 export const rohlik = rohlikFunctions;
 
-// TODO: split into multiple functions
+// TODO:
+//  - split into multiple functions
+//  - change region to Europe - inspiration rohlik functions
 export const midnightTasksUpdateJob = pubsub
     .schedule("59 23 * * *")
     .timeZone("Europe/Prague")
