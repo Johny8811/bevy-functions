@@ -5,12 +5,15 @@ import { getTime } from "date-fns";
 import * as onFleetFunctions from "./functions/onFleet";
 import * as tasksFunctions from "./functions/tasks";
 import * as userFunctions from "./functions/user";
+
 import { updateCompletionAndWorker } from "./scheduled/updateCompletionAndWorker";
 import { updateRdtInOnFleet } from "./scheduled/updateRdtInOnFleet";
+import * as rohlikFunctions from "./scheduled/rohlik";
 
 export const onFleet = onFleetFunctions;
 export const tasks = tasksFunctions;
 export const user = userFunctions;
+export const rohlik = rohlikFunctions;
 
 // TODO: split into multiple functions
 export const midnightTasksUpdateJob = pubsub
