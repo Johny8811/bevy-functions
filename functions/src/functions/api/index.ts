@@ -3,6 +3,7 @@ import { logger } from "firebase-functions";
 import { withCors } from "../../middlewares/withCors";
 import { withAuthorization } from "../../middlewares/withAuthorization";
 import { generateKey } from "../utils/generateKey";
+import { client } from "../../integrations/postgresql";
 
 export const api = withCors(withAuthorization(async (req, res) => {
   try {
@@ -21,9 +22,21 @@ export const api = withCors(withAuthorization(async (req, res) => {
 
 export const generateApiKey = withCors(withAuthorization(async (req, res) => {
   try {
-    console.log(generateKey());
+    const carrierEmail = req.query.email && String(req.query.email);
+    const generatedKey = generateKey();
 
-    res.status(201).json(["test"]);
+    if (!carrierEmail) {
+      res.status(400).json({ message: "Missing route query parameters 'email'" });
+      return;
+    }
+
+    logger.log("carrierEmail: ", carrierEmail);
+
+    const text = "UPDATE carriers SET api_key = $1 WHERE carriers.email = $2";
+    const values = [generatedKey, carrierEmail];
+    await client.query(text, values);
+
+    res.status(201).json({ message: "success" });
   } catch (e) {
     // TODO: improve error handling and logging
     //  https://kentcdodds.com/blog/get-a-catch-block-error-message-with-typescript
