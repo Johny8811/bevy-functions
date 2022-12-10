@@ -2,10 +2,11 @@ import { logger } from "firebase-functions";
 
 import { withCors } from "../../middlewares/withCors";
 import { withAuthorization } from "../../middlewares/withAuthorization";
+import { withApiAuthorization } from "../../middlewares/withApiAuthorization";
 import { generateKey } from "../utils/generateKey";
 import { client } from "../../integrations/postgresql";
 
-export const api = withCors(async (req, res) => {
+export const api = withCors(withApiAuthorization(async (req, res) => {
   try {
     const tasks = JSON.parse(req.body);
 
@@ -22,7 +23,7 @@ export const api = withCors(async (req, res) => {
     logger.log("api: ", e);
     res.status(500).json({ message: (e as Error).message });
   }
-});
+}));
 
 export const generateApiKey = withCors(withAuthorization(async (req, res) => {
   try {
