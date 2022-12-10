@@ -20,8 +20,18 @@ type User = {
   uid: string
 }
 
+type ApiUser = {
+  _id: string;
+  carrier_id: number;
+  name: string;
+  firebase_id: string;
+  email: string;
+  api_key: string;
+}
+
 declare namespace Express {
   export interface Request {
     user: User;
+    apiUser: ApiUser;
   }
 }
