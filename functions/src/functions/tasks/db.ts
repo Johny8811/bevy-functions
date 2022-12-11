@@ -1,8 +1,9 @@
-import { client } from "../../integrations/mongodb";
+import { logger } from "firebase-functions";
+import { add, getTime } from "date-fns";
+
 import { OurOnFleetTask } from "../../types/tasks";
 import { tomorrowTasks as tomorrowTasksFilter } from "../../integrations/onFleet/filters/tomorrowTasks";
-import { add, getTime } from "date-fns";
-import { logger } from "firebase-functions";
+import { client } from "../../integrations/mongodb";
 
 const tasksCollection = client
     .db("on_fleet")

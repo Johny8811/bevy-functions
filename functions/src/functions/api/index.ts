@@ -1,22 +1,30 @@
 import { logger } from "firebase-functions";
+import Ajv from "ajv";
 
 import { withCors } from "../../middlewares/withCors";
 import { withAuthorization } from "../../middlewares/withAuthorization";
 import { withApiAuthorization } from "../../middlewares/withApiAuthorization";
-import { generateKey } from "../utils/generateKey";
 import { client } from "../../integrations/postgresql";
+import { generateKey } from "../utils/generateKey";
+import { tasksArraySchema } from "./tasksArraySchema";
+
+const schemaValidator = new Ajv();
 
 export const api = withCors(withApiAuthorization(async (req, res) => {
   try {
     const tasks = JSON.parse(req.body);
 
-    // TODO: 1. validate
-    // TODO: 2. check if batch exist
-    // TODO: 3. upload to batches order
-    // TODO: 4. upload to orders
+    const tasksSchemaValidator = schemaValidator.compile(tasksArraySchema);
+    const valid = tasksSchemaValidator(tasks);
+
+    if (!valid) {
+      logger.log("Route:/bevy-api - validation errors: ", tasksSchemaValidator.errors);
+      res.status(400).json(tasksSchemaValidator.errors);
+    }
+
+    // TODO: save to DB
 
     res.status(201).json(tasks);
-    // TODO: save to DB
   } catch (e) {
     // TODO: improve error handling and logging
     //  https://kentcdodds.com/blog/get-a-catch-block-error-message-with-typescript
