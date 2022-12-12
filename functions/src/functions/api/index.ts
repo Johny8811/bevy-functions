@@ -14,7 +14,7 @@ import { tasksArraySchema } from "./tasksArraySchema";
 
 const schemaValidator = new Ajv();
 
-export const uploadOrdersBatch = withCors(withApiAuthorization(async (req, res) => {
+export const addJobOrders = withCors(withApiAuthorization(async (req, res) => {
   try {
     const tasks: Task[] = JSON.parse(req.body);
 

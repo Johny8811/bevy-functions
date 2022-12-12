@@ -39,6 +39,7 @@ export const withApiAuthorization = (handler: FunctionHandler) => async (req: Re
   }
 
   try {
+    logger.log("authorizeAPI: token = ", apiKey);
     const user = await findUserByApiKey(apiKey);
 
     logger.log("authorizeAPI: user", { user });
