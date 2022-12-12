@@ -3,47 +3,47 @@ export const tasksArraySchema = {
   items: {
     type: "object",
     properties: {
-      Customer_name: {
+      customer_name: {
         type: "string",
         pattern: "^(?!s*$).+",
       },
-      Tel_number: {
+      tel_number: {
         type: "string",
         pattern: "^(?!s*$).+",
         // pattern: "^(\+|)\d{1,15}$"
       },
-      Street: {
+      street: {
         type: "string",
         pattern: "^(?!s*$).+",
       },
-      House_number: {
+      house_number: {
         type: "string",
       },
-      City: {
+      city: {
         type: "string",
         pattern: "^(?!s*$).+",
       },
-      Country: {
+      country: {
         type: "string",
         pattern: "^(?!s*$).+",
       },
       // Not Required
-      Notification: {
+      notification: {
         type: "boolean",
       },
-      Customer_note: {
+      customer_note: {
         type: "string",
       },
-      Postal_code: {
+      postal_code: {
         type: "string",
       },
-      Deliver_after: {
+      deliver_after: {
         type: "number",
       },
-      Deliver_before: {
+      deliver_before: {
         type: "number",
       },
-      Quantity: {
+      quantity: {
         type: "number",
       },
     },
