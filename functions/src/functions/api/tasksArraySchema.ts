@@ -48,10 +48,10 @@ export const tasksArraySchema = {
       },
     },
     required: [
-      "customer_name",
-      "tel_number",
+      "customerName",
+      "telNumber",
       "street",
-      "house_number",
+      "houseNumber",
       "city",
       "country",
     ],
