@@ -48,12 +48,12 @@ export const tasksArraySchema = {
       },
     },
     required: [
-      "Customer_name",
-      "Tel_number",
-      "Street",
-      "House_number",
-      "City",
-      "Country",
+      "customer_name",
+      "tel_number",
+      "street",
+      "house_number",
+      "city",
+      "country",
     ],
   },
 };
