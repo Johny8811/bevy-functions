@@ -6,13 +6,17 @@ import { withAuthorization } from "../../middlewares/withAuthorization";
 import { withApiAuthorization } from "../../middlewares/withApiAuthorization";
 import { client } from "../../integrations/postgresql";
 import { generateKey } from "../utils/generateKey";
+import {
+  insertBatch,
+  Task,
+} from "../tasks/all_tasks_db";
 import { tasksArraySchema } from "./tasksArraySchema";
 
 const schemaValidator = new Ajv();
 
-export const api = withCors(withApiAuthorization(async (req, res) => {
+export const uploadOrdersBatch = withCors(withApiAuthorization(async (req, res) => {
   try {
-    const tasks = JSON.parse(req.body);
+    const tasks: Task[] = JSON.parse(req.body);
 
     const tasksSchemaValidator = schemaValidator.compile(tasksArraySchema);
     const valid = tasksSchemaValidator(tasks);
@@ -20,10 +24,10 @@ export const api = withCors(withApiAuthorization(async (req, res) => {
     if (!valid) {
       logger.log("Route:/bevy-api - validation errors: ", tasksSchemaValidator.errors);
       res.status(400).json(tasksSchemaValidator.errors);
+      return;
     }
 
-    // TODO: save to DB
-
+    await insertBatch(tasks);
     res.status(201).json(tasks);
   } catch (e) {
     // TODO: improve error handling and logging

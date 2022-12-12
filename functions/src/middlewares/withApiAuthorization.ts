@@ -24,7 +24,7 @@ export const withApiAuthorization = (handler: FunctionHandler) => async (req: Re
         Authorization: Bearer {API_KEY}.`
     );
 
-    res.status(403).json({ message: "Unauthorized" });
+    res.status(401).json({ message: "Unauthorized" });
     return;
   }
 
@@ -34,7 +34,7 @@ export const withApiAuthorization = (handler: FunctionHandler) => async (req: Re
 
     apiKey = req.headers.authorization.split("Bearer ")[1];
   } else {
-    res.status(403).json({ message: "Unauthorized" });
+    res.status(401).json({ message: "Unauthorized" });
     return;
   }
 

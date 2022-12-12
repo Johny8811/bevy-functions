@@ -15,7 +15,7 @@ export const onFleet = onFleetFunctions;
 export const tasks = tasksFunctions;
 export const user = userFunctions;
 export const rohlik = rohlikFunctions;
-export const bevy = apiFunction;
+export const api = apiFunction;
 
 // TODO:
 //  - split into multiple functions
