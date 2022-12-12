@@ -3,6 +3,10 @@ export const tasksArraySchema = {
   items: {
     type: "object",
     properties: {
+      clientOrderId: {
+        type: "string",
+        pattern: "^(?!s*$).+",
+      },
       customerName: {
         type: "string",
         pattern: "^(?!s*$).+",
@@ -48,6 +52,7 @@ export const tasksArraySchema = {
       },
     },
     required: [
+      "clientOrderId",
       "customerName",
       "telNumber",
       "street",
