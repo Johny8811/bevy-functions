@@ -3,11 +3,11 @@ export const tasksArraySchema = {
   items: {
     type: "object",
     properties: {
-      customer_name: {
+      customerName: {
         type: "string",
         pattern: "^(?!s*$).+",
       },
-      tel_number: {
+      telNumber: {
         type: "string",
         pattern: "^(?!s*$).+",
         // pattern: "^(\+|)\d{1,15}$"
@@ -16,7 +16,7 @@ export const tasksArraySchema = {
         type: "string",
         pattern: "^(?!s*$).+",
       },
-      house_number: {
+      houseNumber: {
         type: "string",
       },
       city: {
@@ -31,16 +31,16 @@ export const tasksArraySchema = {
       notification: {
         type: "boolean",
       },
-      customer_note: {
+      customerNote: {
         type: "string",
       },
-      postal_code: {
+      postalCode: {
         type: "string",
       },
-      deliver_after: {
+      deliverAfter: {
         type: "number",
       },
-      deliver_before: {
+      deliverBefore: {
         type: "number",
       },
       quantity: {

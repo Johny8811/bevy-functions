@@ -28,7 +28,7 @@ export const addJobOrders = withCors(withApiAuthorization(async (req, res) => {
     }
 
     await insertBatch(tasks);
-    res.status(201).json(tasks);
+    res.status(200).json({ message: "success" });
   } catch (e) {
     // TODO: improve error handling and logging
     //  https://kentcdodds.com/blog/get-a-catch-block-error-message-with-typescript
