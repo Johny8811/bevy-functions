@@ -19,12 +19,17 @@ export const generateHourlyTimeSlot = (task: OriginOnFleetTask) => {
 
     const isInFirstHalfHour = isBefore(eat, eatHalfHour);
 
-    const startTime = getTime(add(set(eat, {
-      hours: eatHour,
-      minutes: 0,
-      seconds: 0,
-      milliseconds: 0,
-    }), { minutes: isInFirstHalfHour ? 0 : 30 }));
+    const startTime = getTime(
+        add(
+            set(eat, {
+              hours: eatHour,
+              minutes: 0,
+              seconds: 0,
+              milliseconds: 0,
+            }),
+            { minutes: isInFirstHalfHour ? 0 : 30 }
+        )
+    );
     const endTime = getTime(add(startTime, { hours: 1 }));
 
     const start = isBefore(startTime, completeAfter) ? completeAfter : startTime;
