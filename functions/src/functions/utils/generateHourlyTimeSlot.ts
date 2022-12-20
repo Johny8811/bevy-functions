@@ -4,7 +4,7 @@ import { OriginOnFleetTask } from "../../types/tasks";
 
 // TODO: add tests
 export const generateHourlyTimeSlot = (task: OriginOnFleetTask) => {
-  const eat = task.estimatedArrivalTime;
+  const eat = task.estimatedCompletionTime;
   const completeAfter = task.completeAfter;
   const completeBefore = task.completeBefore;
 
@@ -30,7 +30,7 @@ export const generateHourlyTimeSlot = (task: OriginOnFleetTask) => {
             { minutes: isInFirstHalfHour ? 0 : 30 }
         )
     );
-    const endTime = getTime(add(startTime, { hours: 2 }));
+    const endTime = getTime(add(startTime, { hours: 1 }));
 
     const start = isBefore(startTime, completeAfter) ? completeAfter : startTime;
     const end = isAfter(endTime, completeBefore) ? completeBefore : endTime;
