@@ -14,7 +14,7 @@ export const couriersReports = withCors(withApiAuthorization(async (req, res) =>
       data: reports,
     });
 
-    res.status(200).json({ message: "success" });
+    res.status(200).send();
   } catch (e) {
     // TODO: improve error handling and logging
     //  https://kentcdodds.com/blog/get-a-catch-block-error-message-with-typescript
