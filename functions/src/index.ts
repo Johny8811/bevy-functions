@@ -10,11 +10,14 @@ export { addJobOrders } from "./functions/api";
 import { updateCompletionAndWorker } from "./scheduled/updateCompletionAndWorker";
 import { updateRdtInOnFleet } from "./scheduled/updateRdtInOnFleet";
 import * as rohlikFunctions from "./scheduled/rohlik";
+import * as tasksJobsFunctions from "./scheduled/exportTasksOfToDb";
 
 export const onFleet = onFleetFunctions;
 export const tasks = tasksFunctions;
 export const user = userFunctions;
 export const rohlik = rohlikFunctions;
+// midnight export of tasks
+export const tasksJobs = tasksJobsFunctions;
 
 // TODO:
 //  - split into multiple functions
