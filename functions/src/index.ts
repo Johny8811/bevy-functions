@@ -5,7 +5,7 @@ import { getTime } from "date-fns";
 import * as onFleetFunctions from "./functions/onFleet";
 import * as tasksFunctions from "./functions/tasks";
 import * as userFunctions from "./functions/user";
-export { addJobOrders } from "./functions/api";
+import * as apiFunctions from "./functions/api";
 
 import { updateCompletionAndWorker } from "./scheduled/updateCompletionAndWorker";
 import { updateRdtInOnFleet } from "./scheduled/updateRdtInOnFleet";
@@ -18,6 +18,8 @@ export const user = userFunctions;
 export const rohlik = rohlikFunctions;
 // midnight export of tasks
 export const tasksJobs = tasksJobsFunctions;
+// API
+export const api = apiFunctions;
 
 // TODO:
 //  - split into multiple functions
