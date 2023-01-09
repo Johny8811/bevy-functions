@@ -1,10 +1,10 @@
 import { logger } from "firebase-functions";
 
-import { withCors } from "../../middlewares/withCors";
-import { withAuthorization } from "../../middlewares/withAuthorization";
-import { client } from "../../integrations/postgresql";
+import { withCors } from "../../../middlewares/withCors";
+import { withAuthorization } from "../../../middlewares/withAuthorization";
+import { client } from "../../../integrations/postgresql";
 
-import { generateKey } from "../utils/generateKey";
+import { generateKey } from "../../utils/generateKey";
 
 export const generateApiKey = withCors(withAuthorization(async (req, res) => {
   try {
