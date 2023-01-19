@@ -1,6 +1,6 @@
 import * as functions from "firebase-functions";
 import axios from "axios";
-import { getYear, getMonth } from "date-fns";
+import { getYear, getMonth, subDays } from "date-fns";
 
 import { getEnvVariableOrExit } from "../../utils/getEnvVariableOrExit";
 import { csvToJsonStyle } from "../../utils/csvToJsonStyle";
@@ -20,7 +20,8 @@ export const getCouriersDataAndSaveToDb = functions
 
       const currentYear = getYear(new Date());
       const currentMonth = getMonth(new Date());
-      const getDataDate = `${currentYear}${currentMonth + 1}`;
+      const currentMonthString = ("0" + (currentMonth + 1)).slice(-2);
+      const getDataDate = `${currentYear}${currentMonthString}`;
 
       try {
         const invoicingUrl = `${rohlikUrl}/invoicing/?key=${rohlikToken}&carrier=BEVY&month=${getDataDate}`;
@@ -38,14 +39,14 @@ export const getCouriersDataAndSaveToDb = functions
           axios.get(bonusesPenaltiesUrl),
         ]);
 
-        const dateNowIso = new Date().toISOString();
+        const previousDayDateIso = subDays(new Date(), 1).toISOString();
 
         const invoicing = csvToJsonStyle(invoicingResult.data);
         const overview = csvToJsonStyle(overviewResult.data);
         const bonusesPenalties = csvToJsonStyle(bonusesPenaltiesResult.data);
 
         const data = {
-          _id: dateNowIso,
+          _id: previousDayDateIso,
           overview,
           invoicing,
           bonusesPenalties,
