@@ -16,7 +16,7 @@ export const getCouriersDataAndSaveToDb = functions
     .schedule("59 23 * * *")
     .timeZone("Europe/Prague")
     .onRun(async (context) => {
-      functions.logger.log("getCouriersDataAndSaveToDb:context ", context);
+      functions.logger.log("getCouriersDataAndSaveToDb:context ", context.timestamp);
 
       // TODO: MISSING TESTS!!! move this to test
       // const testDate = new Date("2023-01-01T00:00:04.983Z"); // result should: "202212"
@@ -26,7 +26,7 @@ export const getCouriersDataAndSaveToDb = functions
       // const testDate = new Date("2023-02-01T00:00:04.983Z"); // result should: "202301"
       // const testDate = new Date("2023-02-02T00:00:04.983Z"); // result should: "202302"
 
-      const dateNow = new Date(); // testDate;
+      const dateNow = new Date(context.timestamp); // testDate;
 
       const currentDay = getDate(dateNow);
       const isFirstDayOfMonth = currentDay === 1;
@@ -58,7 +58,7 @@ export const getCouriersDataAndSaveToDb = functions
           axios.get(bonusesPenaltiesUrl),
         ]);
 
-        const previousDayDateIso = subDays(new Date(), 1).toISOString();
+        const previousDayDateIso = subDays(dateNow, 1).toISOString();
 
         const invoicing = csvToJsonStyle(invoicingResult.data);
         const overview = csvToJsonStyle(overviewResult.data);
