@@ -13,7 +13,7 @@ const rohlikToken = getEnvVariableOrExit("ROHLIK_TOKEN");
 export const getCouriersDataAndSaveToDb = functions
     .region("europe-west3")
     .pubsub
-    .schedule("59 23 * * *")
+    .schedule("00 03 * * *")
     .timeZone("Europe/Prague")
     .onRun(async (context) => {
       functions.logger.log("getCouriersDataAndSaveToDb:context ", context.timestamp);
