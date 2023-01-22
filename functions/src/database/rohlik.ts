@@ -1,4 +1,5 @@
 import { identity, pickBy } from "lodash";
+import { Filter } from "mongodb";
 
 import { client } from "../integrations/mongodb";
 import { RohlikData, Report } from "./types";
@@ -12,13 +13,7 @@ export const insertData = (data: RohlikData) => couriersDataCollection.insertOne
 
 const dateTypeEnum = ["overview", "invoicing", "bonusesPenalties"];
 
-export const getCouriersDataByMonth = (month: number, type: string | string[]) => {
-  const startMonth = month;
-  const endMonth = startMonth === 12 ? 1 : startMonth + 1;
-
-  const startMonthString = ("0" + startMonth).slice(-2);
-  const endMonthString = ("0" + endMonth).slice(-2);
-
+export const getCouriersDataByMonth = (filter: Filter<RohlikData>, type: string | string[]) => {
   const projection = pickBy(dateTypeEnum.reduce(
       (t, v) =>
         ({
@@ -29,12 +24,9 @@ export const getCouriersDataByMonth = (month: number, type: string | string[]) =
   ), identity);
 
   // TODO: missing "year" resolve, will break in new year
-  return couriersDataCollection.find({
-    _id: {
-      $gt: `2023-${startMonthString}`,
-      $lt: `2023-${endMonthString}`,
-    },
-  }, { projection }).toArray();
+  return couriersDataCollection.find(filter, {
+    projection,
+  }).toArray();
 };
 
 // couriers reports from rohlik about attendance
