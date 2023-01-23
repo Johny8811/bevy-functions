@@ -22,6 +22,7 @@ export type Task = {
   completeAfter: number | undefined;
   completeBefore: number | undefined;
   quantity: number | undefined;
+  pickupTask: boolean;
   estimatedArrivalTime: number
   order: number | null;
   slot: {

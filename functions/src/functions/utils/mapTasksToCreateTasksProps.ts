@@ -13,6 +13,7 @@ export const mapTaskDataToCreateTasksProps = (
       completeAfter,
       completeBefore,
       quantity,
+      pickupTask,
     } = task;
     const {
       number,
@@ -34,6 +35,7 @@ export const mapTaskDataToCreateTasksProps = (
       completeAfter,
       completeBefore,
       quantity,
+      pickupTask,
       metadata,
     };
   });
