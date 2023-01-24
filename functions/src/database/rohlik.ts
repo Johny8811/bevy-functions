@@ -30,9 +30,25 @@ export const getCouriersDataByMonth = (filter: Filter<RohlikData>, type: string 
 };
 
 // ------- couriers reports Prague - overview, invoicing, bonuses / penalties
-const couriersDataPlzenCollection = db.collection<RohlikData>("couriersPlzen");
+const courierDataPlzenCollection = db.collection<RohlikData>("couriersPlzen");
 
-export const plzenReportsInsertData = (data: RohlikData) => couriersDataPlzenCollection.insertOne(data);
+export const plzenReportsInsertData = (data: RohlikData) => courierDataPlzenCollection.insertOne(data);
+
+export const getCourierDataPlzenByMonth = (filter: Filter<RohlikData>, type: string | string[]) => {
+  const projection = pickBy(dateTypeEnum.reduce(
+      (t, v) =>
+        ({
+          ...t,
+          [v]: type?.includes(v),
+        }),
+      {}
+  ), identity);
+
+  // TODO: missing "year" resolve, will break in new year
+  return courierDataPlzenCollection.find(filter, {
+    projection,
+  }).toArray();
+};
 
 // ------- couriers reports from rohlik about attendance
 const couriersReportsCollection = db.collection<Report>("couriersReports");
