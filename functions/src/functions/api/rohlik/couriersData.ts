@@ -3,14 +3,24 @@ import { format, setMonth, setDate, addMonths, subDays } from "date-fns";
 
 import { withCors } from "../../../middlewares/withCors";
 import { withApiAuthorization } from "../../../middlewares/withApiAuthorization";
-import { getCouriersDataByMonth } from "../../../database/rohlik";
+import { getCouriersDataByMonth, getCourierDataPlzenByMonth } from "../../../database/rohlik";
+
+enum OtherLocation {
+  PLZEN = "plzen"
+}
 
 export const couriersData = withCors(withApiAuthorization(async (req, res) => {
   try {
+    const otherLocation = req.query.otherLocation;
     const typeParam = String(req.query.type);
     const type = Array.isArray(typeParam) ? typeParam : typeParam?.split(",");
-
     const month = req.query.month && Number(req.query.month);
+
+    logger.log("query params ", {
+      otherLocation,
+      type: typeParam,
+      month,
+    });
 
     const dateNow = new Date();
     const monthSet = month && setMonth(setDate(dateNow, 1), month - 1);
@@ -33,8 +43,13 @@ export const couriersData = withCors(withApiAuthorization(async (req, res) => {
 
     logger.log("filter ", filter);
 
-    const data = await getCouriersDataByMonth(filter, type);
-    res.status(200).json(data);
+    if (otherLocation === OtherLocation.PLZEN) {
+      const data = await getCourierDataPlzenByMonth(filter, type);
+      res.status(200).json(data);
+    } else {
+      const data = await getCouriersDataByMonth(filter, type);
+      res.status(200).json(data);
+    }
   } catch (e) {
     // TODO: improve error handling and logging
     //  https://kentcdodds.com/blog/get-a-catch-block-error-message-with-typescript
