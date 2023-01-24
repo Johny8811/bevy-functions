@@ -30,5 +30,6 @@ module.exports = {
     "object-curly-spacing": [2, "always"],
     "new-cap": ["error", { "capIsNewExceptionPattern": "^express\\.." }],
     "max-len": [2, 120],
+    "operator-linebreak": [2, "before"],
   },
 };
