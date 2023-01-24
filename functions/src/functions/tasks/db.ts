@@ -31,9 +31,9 @@ export const findTasksByIDs = (ids: string[]) => tasksCollection
 
 export const findTasksByDateRage = (completeAfter: string, completeBefore?: string) => {
   const completeAfterAfter = getTime(new Date(completeAfter));
-  const completeBeforeBefore = getTime(completeBefore ?
-    new Date(completeBefore) :
-    add(completeAfterAfter, { days: 1 })
+  const completeBeforeBefore = getTime(completeBefore
+    ? new Date(completeBefore)
+    : add(completeAfterAfter, { days: 1 })
   );
 
   logger.log("tasksDb:getTasksByDate: ", { completeAfter, completeBefore, completeAfterAfter, completeBeforeBefore });
