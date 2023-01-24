@@ -6,10 +6,10 @@ import { RohlikData, Report } from "./types";
 
 const db = client.db("rohlik");
 
-// couriers data - overview, invoicing, bonuses / penalties
+// ------- couriers reports Prague - overview, invoicing, bonuses / penalties
 const couriersDataCollection = db.collection<RohlikData>("couriers");
 
-export const insertData = (data: RohlikData) => couriersDataCollection.insertOne(data);
+export const pragReportsInsertData = (data: RohlikData) => couriersDataCollection.insertOne(data);
 
 const dateTypeEnum = ["overview", "invoicing", "bonusesPenalties"];
 
@@ -29,7 +29,12 @@ export const getCouriersDataByMonth = (filter: Filter<RohlikData>, type: string 
   }).toArray();
 };
 
-// couriers reports from rohlik about attendance
+// ------- couriers reports Prague - overview, invoicing, bonuses / penalties
+const couriersDataPlzenCollection = db.collection<RohlikData>("couriersPlzen");
+
+export const plzenReportsInsertData = (data: RohlikData) => couriersDataPlzenCollection.insertOne(data);
+
+// ------- couriers reports from rohlik about attendance
 const couriersReportsCollection = db.collection<Report>("couriersReports");
 
 export const couriersReportsInsertData = (data: Report) => couriersReportsCollection.insertOne(data);
