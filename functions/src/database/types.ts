@@ -49,7 +49,7 @@ export interface RohlikData {
   bonusesPenalties: BonusesPenalties;
 }
 
-export interface CourierReport {
+export interface CourierAttendance {
   courier_id: number;
   name: string;
   route_id: number;
@@ -61,7 +61,7 @@ export interface CourierReport {
   posledni_dorucena_objednavka_v_route: string;
 }
 
-export interface Report {
+export interface AttendanceCollection {
   created: number;
-  data: CourierReport[];
+  data: CourierAttendance[];
 }

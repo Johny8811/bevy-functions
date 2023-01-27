@@ -2,7 +2,7 @@ import { identity, pickBy } from "lodash";
 import { Filter } from "mongodb";
 
 import { client } from "../integrations/mongodb";
-import { RohlikData, Report } from "./types";
+import { RohlikData, AttendanceCollection } from "./types";
 
 const db = client.db("rohlik");
 
@@ -51,6 +51,7 @@ export const getCourierDataPlzenByMonth = (filter: Filter<RohlikData>, type: str
 };
 
 // ------- couriers reports from rohlik about attendance
-const couriersReportsCollection = db.collection<Report>("couriersReports");
+const couriersAttendanceCollection = db.collection<AttendanceCollection>("couriersAttendance");
 
-export const couriersReportsInsertData = (data: Report) => couriersReportsCollection.insertOne(data);
+export const couriersAttendanceInsertData = (data: AttendanceCollection) =>
+  couriersAttendanceCollection.insertOne(data);

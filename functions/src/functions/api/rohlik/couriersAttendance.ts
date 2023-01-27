@@ -2,15 +2,14 @@ import { logger } from "firebase-functions";
 
 import { withCors } from "../../../middlewares/withCors";
 import { withApiAuthorization } from "../../../middlewares/withApiAuthorization";
-import { CourierReport } from "../../../database/types";
-import { couriersReportsInsertData } from "../../../database/rohlik";
+import { CourierAttendance } from "../../../database/types";
+import { couriersAttendanceInsertData } from "../../../database/rohlik";
 
-// TODO: rename to "couriersAttendance". Rename also colletion in DB
-export const couriersReports = withCors(withApiAuthorization(async (req, res) => {
+export const couriersAttendance = withCors(withApiAuthorization(async (req, res) => {
   try {
-    const reports: CourierReport[] = JSON.parse(req.body);
+    const reports: CourierAttendance[] = JSON.parse(req.body);
 
-    await couriersReportsInsertData({
+    await couriersAttendanceInsertData({
       created: new Date().getTime(),
       data: reports,
     });
