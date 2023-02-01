@@ -83,3 +83,41 @@ export const updateCompletionAndWorkerByTaskId = (task: Omit<OurOnFleetTask, "sl
       }
   );
 
+export const aggregateTasks = (completeAfterDate: string, completeBeforeDate: string) => {
+  const completeAfter = new Date(completeAfterDate).getTime();
+  const completeBefore = new Date(completeBeforeDate).getTime();
+
+  return tasksCollection
+      .aggregate([
+        {
+          "$match": {
+            "completeAfter": {
+              // "$gt": 1662328800000,
+              "$gt": completeAfter,
+            },
+            "completeBefore": {
+              // "$lt": 1662674400000,
+              "$lt": completeBefore,
+            },
+            "metadata": {
+              $elemMatch: {
+                value: "rJaC7Bq8b1NHNigfBoWBl3Zzcm63", // Nutrition Pro
+              },
+            },
+          },
+        }, {
+          "$group": {
+            "_id": {
+              "street": "$destination.address.street",
+              "number": "$destination.address.number",
+              "city": "$destination.address.city",
+              "completeAfter": "$completeAfter",
+            },
+            "uniqAddress": {
+              "$push": "$$ROOT",
+            },
+          },
+        },
+      ])
+      .toArray();
+};
