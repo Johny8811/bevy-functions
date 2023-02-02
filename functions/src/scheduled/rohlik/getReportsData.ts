@@ -1,3 +1,4 @@
+import { logger } from "firebase-functions";
 import axios from "axios";
 import { getDate, getMonth, getYear, subDays, subMonths, subYears } from "date-fns";
 
@@ -36,10 +37,24 @@ export const getReportsData = async (carrier: BevyRohlikCarriers, timestamp: num
     : getYear(dateNow);
   const monthParam = isFirstDayOfMonth ? getMonth(subMonths(dateNow, 1)) : getMonth(dateNow);
 
+  logger.log("building date: ", {
+    isFirstDayOfMonth,
+    isFirstMonthOfYear,
+    yearParam,
+    monthParam,
+  });
+
   const monthParamStr = ("0" + (monthParam + 1)).slice(-2);
   const getDataDate = `${yearParam}${monthParamStr}`;
 
   const token = carrier === BevyRohlikCarriers.BEVY_PRAGUE ? pragueToken : plzenToken;
+
+  logger.log("URL parameters: ", {
+    rohlikUrl,
+    token,
+    carrier,
+    getDataDate,
+  });
 
   const invoicingUrl = `${rohlikUrl}/invoicing/?key=${token}&carrier=${carrier}&month=${getDataDate}`;
   const overviewUrl = `${rohlikUrl}/overview/?key=${token}&carrier=${carrier}&month=${getDataDate}`;
@@ -57,6 +72,8 @@ export const getReportsData = async (carrier: BevyRohlikCarriers, timestamp: num
   ]);
 
   const previousDayDateIso = subDays(dateNow, 1).toISOString();
+
+  logger.log("previousDayDateIso: ", previousDayDateIso);
 
   const invoicing = csvToJsonStyle(invoicingResult.data);
   const overview = csvToJsonStyle(overviewResult.data);
