@@ -15,7 +15,7 @@ const rohlikUrl = getEnvVariableOrExit("ROHLIK_URL");
 const pragueToken = getEnvVariableOrExit("ROHLIK_BEVY_PRAGUE_TOKEN");
 const plzenToken = getEnvVariableOrExit("ROHLIK_BEVY_PLZEN_TOKEN");
 
-export const getReportsData = async (carrier: BevyRohlikCarriers, timestamp: number) => {
+export const getReportsData = async (carrier: BevyRohlikCarriers, date: Date) => {
   // TODO: MISSING TESTS!!! move this to test
   // const testDate = new Date("2023-01-01T00:00:04.983Z"); // result should: "202212"
   // const testDate = new Date("2023-01-02T00:00:04.983Z"); // result should: "202301"
@@ -24,7 +24,7 @@ export const getReportsData = async (carrier: BevyRohlikCarriers, timestamp: num
   // const testDate = new Date("2023-02-01T00:00:04.983Z"); // result should: "202301"
   // const testDate = new Date("2023-02-02T00:00:04.983Z"); // result should: "202302"
 
-  const dateNow = new Date(timestamp); // testDate;
+  const dateNow = date; // testDate;
 
   const currentDay = getDate(dateNow);
   const isFirstDayOfMonth = currentDay === 1;
@@ -37,15 +37,15 @@ export const getReportsData = async (carrier: BevyRohlikCarriers, timestamp: num
     : getYear(dateNow);
   const monthParam = isFirstDayOfMonth ? getMonth(subMonths(dateNow, 1)) : getMonth(dateNow);
 
+  const monthParamStr = ("0" + (monthParam + 1)).slice(-2);
+  const getDataDate = `${yearParam}${monthParamStr}`;
+
   logger.log("building date: ", {
     isFirstDayOfMonth,
     isFirstMonthOfYear,
     yearParam,
-    monthParam,
+    monthParamStr,
   });
-
-  const monthParamStr = ("0" + (monthParam + 1)).slice(-2);
-  const getDataDate = `${yearParam}${monthParamStr}`;
 
   const token = carrier === BevyRohlikCarriers.BEVY_PRAGUE ? pragueToken : plzenToken;
 

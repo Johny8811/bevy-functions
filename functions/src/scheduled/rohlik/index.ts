@@ -12,7 +12,7 @@ export const getCourierReportsAndSavePrague = functions
       functions.logger.log("getCourierReportsAndSavePrague:context ", context.timestamp);
 
       try {
-        const data = await getReportsData(BevyRohlikCarriers.BEVY_PRAGUE, new Date(context.timestamp).getTime());
+        const data = await getReportsData(BevyRohlikCarriers.BEVY_PRAGUE, new Date(context.timestamp));
         await pragReportsInsertData(data);
       } catch (e) {
         functions.logger.log("getCourierReportsAndSavePrague:error:  ", e);
@@ -28,7 +28,7 @@ export const getCourierReportsAndSavePlzen = functions
       functions.logger.log("getCourierReportsAndSavePlzen:context ", context.timestamp);
 
       try {
-        const data = await getReportsData(BevyRohlikCarriers.BEVY_PLZEN, new Date(context.timestamp).getTime());
+        const data = await getReportsData(BevyRohlikCarriers.BEVY_PLZEN, new Date(context.timestamp));
         await plzenReportsInsertData(data);
       } catch (e) {
         functions.logger.log("getCourierReportsAndSavePlzen:error:  ", e);
