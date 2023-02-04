@@ -6,7 +6,7 @@ import { BevyRohlikCarriers, getReportsData } from "./getReportsData";
 export const getCourierReportsAndSavePrague = functions
     .region("europe-west3")
     .pubsub
-    .schedule("00 03 * * *")
+    .schedule("00 23 * * *")
     .timeZone("Europe/Prague")
     .onRun(async (context) => {
       functions.logger.log("getCourierReportsAndSavePrague:context ", context.timestamp);
@@ -22,7 +22,7 @@ export const getCourierReportsAndSavePrague = functions
 export const getCourierReportsAndSavePlzen = functions
     .region("europe-west3")
     .pubsub
-    .schedule("00 03 * * *")
+    .schedule("00 23 * * *")
     .timeZone("Europe/Prague")
     .onRun(async (context) => {
       functions.logger.log("getCourierReportsAndSavePlzen:context ", context.timestamp);
