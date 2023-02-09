@@ -16,6 +16,7 @@ import {
   aggregateTasks,
 } from "./db";
 import { onFleetApi } from "../../integrations/onFleet";
+import { SKIP_AUTH } from "../../constants";
 
 // https://stackoverflow.com/questions/57771798/how-do-i-jsdoc-parameters-to-web-request
 /**
@@ -33,7 +34,7 @@ export const getTasks = withCors(withAuthorization(async (req, res) => {
 
   const completeAfter = req.query.completeAfter && String(req.query.completeAfter);
   const completeBefore = req.query.completeBefore && String(req.query.completeBefore);
-  const userId = req.user.uid;
+  const userId = req.user?.uid;
 
   try {
     const usersRolesStr = await getValueByParameterName(RemoteConfigParameters.USERS_ROLES);
@@ -50,6 +51,12 @@ export const getTasks = withCors(withAuthorization(async (req, res) => {
 
     if (!completeAfter) {
       res.status(400).json({ message: "Missing route query parameters 'completeAfter'" });
+      return;
+    }
+
+    if (SKIP_AUTH) {
+      const tasks = await findTasksByDateRage(completeAfter, completeBefore);
+      res.status(200).json(tasks);
       return;
     }
 
