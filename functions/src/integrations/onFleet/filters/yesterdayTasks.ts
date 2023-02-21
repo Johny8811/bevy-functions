@@ -24,8 +24,8 @@ export const yesterdayTasks = (initTimestamp?: number): Pick<
     seconds: 0,
   });
   const from = getTime(sub(today, { days: 7 }));
-  const completeAfterAfter = getTime(sub(today, { days: 2 }));
-  const completeBeforeBefore = getTime(sub(today, { days: 1 }));
+  const completeAfterAfter = getTime(sub(today, { days: 1 }));
+  const completeBeforeBefore = getTime(today);
 
   logger.log("filterYesterdayTasks: ", {
     createdFrom: from,
