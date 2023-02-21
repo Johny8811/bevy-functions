@@ -3,6 +3,8 @@ import { add, getTime } from "date-fns";
 
 import { OurOnFleetTask } from "../../types/tasks";
 import { tomorrowTasks as tomorrowTasksFilter } from "../../integrations/onFleet/filters/tomorrowTasks";
+import { todayTasks as todayTasksFilter } from "../../integrations/onFleet/filters/todayTasks";
+import { yesterdayTasks as yesterdayTasksFilter } from "../../integrations/onFleet/filters/yesterdayTasks";
 import { client } from "../../integrations/mongodb";
 
 const tasksCollection = client
@@ -65,6 +67,28 @@ export const findTomorrowTasks = () => {
   const { completeAfterAfter, completeBeforeBefore } = tomorrowTasksFilter();
 
   logger.log("tasksDb:findTomorrowTasks: ", { completeAfterAfter, completeBeforeBefore });
+
+  return tasksCollection.find({
+    completeAfter: { $gt: completeAfterAfter },
+    completeBefore: { $lt: completeBeforeBefore },
+  }).toArray();
+};
+
+export const findTodayTasks = () => {
+  const { completeAfterAfter, completeBeforeBefore } = todayTasksFilter();
+
+  logger.log("tasksDb:findTodayTasks: ", { completeAfterAfter, completeBeforeBefore });
+
+  return tasksCollection.find({
+    completeAfter: { $gt: completeAfterAfter },
+    completeBefore: { $lt: completeBeforeBefore },
+  }).toArray();
+};
+
+export const findYesterdayTasks = () => {
+  const { completeAfterAfter, completeBeforeBefore } = yesterdayTasksFilter();
+
+  logger.log("tasksDb:findYesterdayTasks: ", { completeAfterAfter, completeBeforeBefore });
 
   return tasksCollection.find({
     completeAfter: { $gt: completeAfterAfter },
