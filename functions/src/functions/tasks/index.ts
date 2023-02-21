@@ -13,6 +13,8 @@ import {
   findTasksByDateAndUserId,
   findTasksByDateRage,
   findTomorrowTasks,
+  findTodayTasks,
+  findYesterdayTasks,
   aggregateTasks,
 } from "./db";
 import { onFleetApi } from "../../integrations/onFleet";
@@ -42,12 +44,6 @@ export const getTasks = withCors(withAuthorization(async (req, res) => {
     const roles = usersRoles[userId];
 
     logger.log("tasks-getTasks - user roles: ", roles);
-
-    if (hasRole(roles, "dispatcher")) {
-      const tasks = await findTomorrowTasks();
-      res.status(200).json(tasks);
-      return;
-    }
 
     if (!completeAfter) {
       res.status(400).json({ message: "Missing route query parameters 'completeAfter'" });
@@ -81,6 +77,44 @@ export const getTasks = withCors(withAuthorization(async (req, res) => {
     res.status(500).json({ message: (e as Error).message });
   }
 }));
+
+/**
+ * @property {string} dayName yesterday, today, tomorrow
+ *
+ * @param {import('express').Request<{}, {}, {}, getTasksRequestQuery>} req
+ * @param {import('express').Response} res
+ */
+export const getTasksByDayName = withCors(withAuthorization(async (req, res) => {
+  logger.log("tasks-getTasksByDayName - query parameters: ", req.query);
+
+  const dayName = req.query.dayName && String(req.query.dayName);
+
+  try {
+    if (dayName === "yesterday") {
+      const tasks = await findYesterdayTasks();
+      res.status(200).json(tasks);
+      return;
+    }
+
+    if (dayName === "today") {
+      const tasks = await findTodayTasks();
+      res.status(200).json(tasks);
+      return;
+    }
+
+    if (dayName === "tomorrow") {
+      const tasks = await findTomorrowTasks();
+      res.status(200).json(tasks);
+      return;
+    }
+  } catch (e) {
+    // TODO: improve error handling and logging
+    //  https://kentcdodds.com/blog/get-a-catch-block-error-message-with-typescript
+    logger.log("tasks-getTasksByDayName - Error: ", e);
+    res.status(500).json({ message: (e as Error).message });
+  }
+}));
+
 
 export const getAggregatedTasks = withCors(withAuthorization(async (req, res) => {
   const completeAfter = req.query.completeAfter && String(req.query.completeAfter);
