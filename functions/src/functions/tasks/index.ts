@@ -134,7 +134,7 @@ export const getAggregatedTasks = withCors(withAuthorization(async (req, res) =>
   } catch (e) {
     // TODO: improve error handling and logging
     //  https://kentcdodds.com/blog/get-a-catch-block-error-message-with-typescript
-    logger.log("tasks-batchCreate: ", e);
+    logger.log("tasks-getAggregatedTasks: ", e);
     res.status(500).json({ message: (e as Error).message });
   }
 }));
@@ -159,6 +159,7 @@ export const batchCreate = withCors(withAuthorization(async (req, res) => {
     ];
 
     const createTasksProps = mapTaskDataToCreateTasksProps(tasks, metadata);
+    logger.log("tasks-batchCreate:createTasksProps ", JSON.stringify(createTasksProps));
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     const result = await onFleetApi.tasks.batchCreate({ tasks: createTasksProps });
