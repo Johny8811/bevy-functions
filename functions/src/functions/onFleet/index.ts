@@ -10,7 +10,7 @@ import { generateOrderForTasks } from "../utils/generateTaskOrder";
 import { filterOnFleetExportByDbTasks } from "../utils/filterOnFleetExportByDbTasks";
 import { generateHourlyTimeSlot } from "../utils/generateHourlyTimeSlot";
 import { findTasksByIDs, insertTasks, updateTask } from "../tasks/db";
-import { OurOnFleetTask } from "../../types/tasks";
+import { OurOnFleetTask, TaskMetadata } from "../../types/tasks";
 
 export const exportTasksToDbMethod = async (
     successCb: (tasks: OurOnFleetTask[]) => void,
@@ -29,7 +29,22 @@ export const exportTasksToDbMethod = async (
     if (onFleetTasks.length > 0) {
       const databaseTasks = await findTasksByIDs(exportedTasksIds);
       const tasksWithOrder = generateOrderForTasks(onFleetTasks);
-      const ourOnFleetTasks = tasksWithOrder.map((t) => ({ ...t, slot: generateHourlyTimeSlot(t) }));
+      const ourOnFleetTasks = tasksWithOrder.map((t) => {
+        const shouldGenerateSlot = t.metadata.find((m) => m.name === TaskMetadata.UserId);
+
+        if (shouldGenerateSlot) {
+          return {
+            ...t, slot: generateHourlyTimeSlot(t),
+          };
+        }
+
+        return {
+          ...t, slot: {
+            start: t.completeAfter,
+            end: t.completeBefore,
+          },
+        };
+      });
 
       const { newTasks, updatedTasks } = filterOnFleetExportByDbTasks(ourOnFleetTasks, databaseTasks);
 
