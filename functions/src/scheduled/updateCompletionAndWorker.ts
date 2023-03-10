@@ -10,7 +10,7 @@ export const updateCompletionAndWorker = async (initTimestamp: number) => {
     const onFleetTasks = await getAllTasks(filter);
     const exportedTasksIds = onFleetTasks.map((t) => t.shortId);
 
-    logger.log("updateTaskCompletionAndWorker:exportedTasksIds: ", exportedTasksIds);
+    logger.log("updateTaskCompletionAndWorker:exportedTasksIds: ", JSON.stringify(exportedTasksIds));
 
     const updateResult = await Promise.all(onFleetTasks.map((task) =>
       updateCompletionAndWorkerByTaskId(task)
