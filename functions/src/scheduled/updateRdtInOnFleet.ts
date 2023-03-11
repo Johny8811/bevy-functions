@@ -4,17 +4,22 @@ import { findTasksByIDs } from "../functions/tasks/db";
 import { onFleetApi } from "../integrations/onFleet";
 import { tomorrowTasks } from "../integrations/onFleet/filters/tomorrowTasks";
 import { getAllTasks } from "../integrations/onFleet/getAllTasks";
+import { TaskMetadata } from "../types/tasks";
 
 
 export const updateRdtInOnFleet = async (initTimestamp: number) => {
   try {
     const filter = tomorrowTasks(initTimestamp);
-    const onFleetTasks = await getAllTasks(filter);
-    const exportedTasksIds = onFleetTasks.map((t) => t.id);
+    const tomorrowOnFleetTasks = await getAllTasks(filter);
+    const filteredOldPortalOFTasks = tomorrowOnFleetTasks.filter((t) =>
+      t.metadata.find((m) => m.name === TaskMetadata.UserId)
+    );
+
+    const exportedTasksIds = filteredOldPortalOFTasks.map((t) => t.id);
 
     logger.log(
         "updateRdtInOnFleet:exportedTasksIds: ",
-        JSON.stringify(onFleetTasks.map((t) => t.shortId))
+        JSON.stringify(filteredOldPortalOFTasks.map((t) => t.shortId))
     );
 
     const databaseTasks = await findTasksByIDs(exportedTasksIds);
