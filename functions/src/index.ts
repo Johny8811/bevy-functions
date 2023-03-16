@@ -25,7 +25,7 @@ export const api = apiFunctions;
 //  - split into multiple functions
 //  - change region to Europe - inspiration rohlik functions
 export const midnightTasksUpdateJob = pubsub
-    .schedule("59 23 * * *")
+    .schedule("55 23 * * *")
     .timeZone("Europe/Prague")
     .onRun(async (context) => {
       logger.log("midnightTasksUpdateJob:context ", context);
