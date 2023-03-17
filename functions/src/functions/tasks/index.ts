@@ -76,7 +76,7 @@ export const getTasks = withCors(withAuthorization(async (req, res) => {
     logger.log("tasks-getTasks - Error: ", e);
     res.status(500).json({ message: (e as Error).message });
   }
-}));
+}), "512MB");
 
 /**
  * @property {string} dayName yesterday, today, tomorrow
