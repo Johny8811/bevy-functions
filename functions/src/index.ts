@@ -31,10 +31,8 @@ export const midnightTasksUpdateJob = pubsub
       logger.log("midnightTasksUpdateJob:context ", context);
 
       const timestamp = getTime(new Date(context.timestamp));
-      await Promise.all([
-        updateCompletionAndWorker(timestamp),
-        updateRdtInOnFleet(timestamp)]
-      );
+      await updateCompletionAndWorker(timestamp);
+      await updateRdtInOnFleet(timestamp);
 
       return null;
     });
