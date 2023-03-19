@@ -18,6 +18,8 @@ export const updateRdtInOnFleet = async (initTimestamp: number) => {
     );
 
     const databaseTasks = await findTasksByIDs(exportedTasksIds);
+    logger.log("updateRdtInOnFleet: databaseTasks: ", databaseTasks.map((v) => v.shortId));
+
     const result = await Promise.all(databaseTasks.map((task) =>
       onFleetApi.tasks.update(task.id, {
         completeAfter: task.slot?.start,
