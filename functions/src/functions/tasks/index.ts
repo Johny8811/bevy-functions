@@ -3,10 +3,11 @@ import { OnfleetMetadata } from "@onfleet/node-onfleet/metadata";
 
 import { getValueByParameterName, hasRole } from "../../integrations/firebase/remoteConfig";
 import { RemoteConfigParameters } from "../../integrations/firebase/types";
-import { TaskMetadata } from "../../types/tasks";
+import { OurOnFleetTask, TaskMetadata } from "../../types/tasks";
 import { withCors } from "../../middlewares/withCors";
 import { withAuthorization } from "../../middlewares/withAuthorization";
 import { sortByWorkerAndEat } from "../utils/sortByWorkerAndEat";
+import { mapTaskKeysToFeTaskKeys } from "../utils/mapTaskKeysToFeTaskKeys";
 import { mapTaskDataToCreateTasksProps } from "../utils/mapTasksToCreateTasksProps";
 
 import {
@@ -53,22 +54,22 @@ export const getTasks = withCors(withAuthorization(async (req, res) => {
     if (SKIP_AUTH) {
       // TODO: return just needed keys
       const tasks = await findTasksByDateRage(completeAfter, completeBefore);
-      res.status(200).json(tasks);
+      res.status(200).json(mapTaskKeysToFeTaskKeys(tasks));
       return;
     }
 
     if (hasRole(roles, "root")) {
       // TODO: return just needed keys
       const tasks = await findTasksByDateRage(completeAfter, completeBefore);
-      res.status(200).json(tasks);
+      res.status(200).json(mapTaskKeysToFeTaskKeys(tasks));
       return;
     }
 
     if (hasRole(roles, "user")) {
       // TODO: return just needed keys
       const tasks = await findTasksByDateAndUserId(completeAfter, userId);
-      const sortedTasks = sortByWorkerAndEat(tasks);
-      res.status(200).json(sortedTasks);
+      const sortedTasks = sortByWorkerAndEat(tasks) as OurOnFleetTask[];
+      res.status(200).json(mapTaskKeysToFeTaskKeys(sortedTasks));
       return;
     }
 
