@@ -1,6 +1,6 @@
 // import { logger } from "firebase-functions";
 
-import { client } from "../../integrations/mongodb";
+import { client } from "../integrations/mongodb";
 
 export type Task = {
   id: number;

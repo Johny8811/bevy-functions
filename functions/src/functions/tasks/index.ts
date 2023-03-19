@@ -16,7 +16,7 @@ import {
   findTodayTasks,
   findYesterdayTasks,
   aggregateTasks,
-} from "./db";
+} from "../../database/db";
 import { onFleetApi } from "../../integrations/onFleet";
 import { SKIP_AUTH } from "../../constants";
 

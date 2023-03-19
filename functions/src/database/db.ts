@@ -1,11 +1,11 @@
 import { logger } from "firebase-functions";
 import { add, getTime } from "date-fns";
 
-import { OurOnFleetTask } from "../../types/tasks";
-import { tomorrowTasks as tomorrowTasksFilter } from "../../integrations/onFleet/filters/tomorrowTasks";
-import { todayTasks as todayTasksFilter } from "../../integrations/onFleet/filters/todayTasks";
-import { yesterdayTasks as yesterdayTasksFilter } from "../../integrations/onFleet/filters/yesterdayTasks";
-import { client } from "../../integrations/mongodb";
+import { OurOnFleetTask } from "../types/tasks";
+import { tomorrowTasks as tomorrowTasksFilter } from "../integrations/onFleet/filters/tomorrowTasks";
+import { todayTasks as todayTasksFilter } from "../integrations/onFleet/filters/todayTasks";
+import { yesterdayTasks as yesterdayTasksFilter } from "../integrations/onFleet/filters/yesterdayTasks";
+import { client } from "../integrations/mongodb";
 
 const tasksCollection = client
     .db("on_fleet")
