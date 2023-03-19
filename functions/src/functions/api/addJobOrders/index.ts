@@ -4,7 +4,7 @@ import { logger } from "firebase-functions";
 import { withCors } from "../../../middlewares/withCors";
 import { withApiAuthorization } from "../../../middlewares/withApiAuthorization";
 
-import { insertBatch, Task } from "../../../database/all_tasks_db";
+import { insertBatch, Task } from "../../../database/tasks_api_db";
 import { tasksArraySchema } from "./tasksArraySchema";
 
 const schemaValidator = new Ajv();
