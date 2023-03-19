@@ -52,21 +52,18 @@ export const getTasks = withCors(withAuthorization(async (req, res) => {
     }
 
     if (SKIP_AUTH) {
-      // TODO: return just needed keys
       const tasks = await findTasksByDateRage(completeAfter, completeBefore);
       res.status(200).json(mapTaskKeysToFeTaskKeys(tasks));
       return;
     }
 
     if (hasRole(roles, "root")) {
-      // TODO: return just needed keys
       const tasks = await findTasksByDateRage(completeAfter, completeBefore);
       res.status(200).json(mapTaskKeysToFeTaskKeys(tasks));
       return;
     }
 
     if (hasRole(roles, "user")) {
-      // TODO: return just needed keys
       const tasks = await findTasksByDateAndUserId(completeAfter, userId);
       const sortedTasks = sortByWorkerAndEat(tasks) as OurOnFleetTask[];
       res.status(200).json(mapTaskKeysToFeTaskKeys(sortedTasks));
