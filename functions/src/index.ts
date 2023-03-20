@@ -24,6 +24,9 @@ export const api = apiFunctions;
 // TODO:
 //  - split into multiple functions
 //  - change region to Europe - inspiration rohlik functions
+// job failed on timeout
+//  - I increased timeout seconds manually in cloud console
+//  - should be permanently set here in code
 export const midnightTasksUpdateJob = pubsub
     .schedule("55 23 * * *")
     .timeZone("Europe/Prague")
