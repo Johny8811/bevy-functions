@@ -2,10 +2,11 @@ import { add, getTime, set, sub } from "date-fns";
 import { logger } from "firebase-functions";
 import { TaskQueryParam } from "@onfleet/node-onfleet/Resources/Tasks";
 
+// eslint-disable-next-line valid-jsdoc
 /**
  * Return query parameters to get tasks for today
  *
- * @param {number} initTimestamp - use, when is needed to ensure call method with specific time
+ * @props {Object} { initTimestamp: number } - use, when is needed to ensure call method with specific time
  *
  * @typedef {Object} Params
  * @property {number} from - Tasks created from
@@ -14,11 +15,11 @@ import { TaskQueryParam } from "@onfleet/node-onfleet/Resources/Tasks";
  *
  * @return {Params}
  */
-export const todayTasks = (initTimestamp?: number): Pick<
+export const todayTasks = (props?: { initTimestamp: number, origin?: string }): Pick<
   TaskQueryParam,
   "from" | "completeAfterAfter" | "completeBeforeBefore"
   > => {
-  const today = getTime(set(initTimestamp || new Date(), {
+  const today = getTime(set(props?.initTimestamp || new Date(), {
     hours: 0,
     minutes: 0,
     seconds: 0,
@@ -26,7 +27,7 @@ export const todayTasks = (initTimestamp?: number): Pick<
   const from = getTime(sub(today, { days: 7 }));
   const completeBeforeBefore = getTime(add(today, { days: 1 }));
 
-  logger.log("midnightTasksUpdate:todayTasks: ", {
+  logger.log(`Origin: ${origin || "-"} midnightTasksUpdate:todayTasks: `, {
     createdFrom: from,
     completeAfterAfter: today,
     completeBeforeBefore,
