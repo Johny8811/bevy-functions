@@ -10,6 +10,7 @@ export const generateHourlyTimeSlot = (task: OriginOnFleetTask) => {
   const completeAfter = task.completeAfter;
   const completeBefore = task.completeBefore;
 
+  logger.log("generateHourlyTimeSlot: task.shortId ", task.shortId);
   logger.log("generateHourlyTimeSlot: task values ", {
     eat: eat && formatToDateAndTime(eat),
     completeAfter: formatToDateAndTime(completeAfter),
