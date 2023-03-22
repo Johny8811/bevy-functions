@@ -14,14 +14,18 @@ import { OurOnFleetTask } from "../../types/tasks";
 
 export const exportTasksToDbMethod = async (
     successCb: (tasks: OurOnFleetTask[]) => void,
-    errorCb: (e: Error) => void) => {
+    errorCb: (e: Error) => void,
+    origin: string
+) => {
+  logger.log("exportTasksToDbMethod - start | origin: ", origin);
+
   try {
     const filter = tomorrowTasks();
     const onFleetTasks = await getAllTasks(filter);
     const exportedTasksIds = onFleetTasks.map((t) => t.id);
 
     logger.log(
-        "function-exportTasksToDb - Prepared tasks ids for tomorrow: ",
+        "exportTasksToDbMethod - Prepared tasks ids for tomorrow: ",
         onFleetTasks.map((t) => t.shortId),
         " count: ", exportedTasksIds.length
     );
@@ -34,14 +38,14 @@ export const exportTasksToDbMethod = async (
       const { newTasks, updatedTasks } = filterOnFleetExportByDbTasks(ourOnFleetTasks, databaseTasks);
 
       logger.log(
-          "function-exportTasksToDb - new tasks ids: ",
-          newTasks.map((t) => t.shortId),
-          " count: ", newTasks.length
+          " count: ", newTasks.length,
+          "exportTasksToDbMethod - new tasks ids: ",
+          newTasks.map((t) => t.shortId)
       );
       logger.log(
-          "function-exportTasksToDb - updated tasks ids: ",
-          updatedTasks.map((t) => t.shortId),
-          " count: ", updatedTasks.length
+          " count: ", updatedTasks.length,
+          "exportTasksToDbMethod - updated tasks ids: ",
+          updatedTasks.map((t) => t.shortId)
       );
 
       if (newTasks.length > 0) {
@@ -59,7 +63,7 @@ export const exportTasksToDbMethod = async (
   } catch (e) {
     // TODO: improve error handling and logging
     //  https://kentcdodds.com/blog/get-a-catch-block-error-message-with-typescript
-    logger.log("function-exportTasksToDb - Error: ", e);
+    logger.log("exportTasksToDbMethod - Error: ", e);
     errorCb(e as Error);
   }
 };
@@ -75,7 +79,7 @@ export const exportTasksToDb = withCors(withAuthorization(async (req, res) => {
       },
       (e) => {
         res.status(500).json({ message: (e as Error).message });
-      });
+      }, "\"onFleet - export tasks\" - BUTTON");
 }));
 
 /**

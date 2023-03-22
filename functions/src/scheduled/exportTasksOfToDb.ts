@@ -10,13 +10,13 @@ export const midnightExportTasksToDb = functions
     .timeZone("Europe/Prague")
     .onRun(async () => {
       try {
-        logger.log("exportTasksOfToDb:job");
+        logger.log("exportTasksToDb:JOB - start");
 
         await exportTasksToDbMethod((tasks) => {
-          logger.log("exportTasksOfToDb:job - tasks: ", tasks);
+          logger.log("exportTasksToDb:JOB - tasks: ", tasks);
         }, (e) => {
-          logger.log("exportTasksOfToDb:job - error: ", e);
-        });
+          logger.log("exportTasksToDb:JOB - error: ", e);
+        }, "midnight exportTasks - JOB");
       } catch (e) {
         logger.log("updateRdtInOnFleet:Error:  ", e);
       }
