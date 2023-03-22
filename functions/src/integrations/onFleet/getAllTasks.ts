@@ -4,7 +4,7 @@ import { OriginOnFleetTask } from "../../types/tasks";
 import { onFleetApi } from "./";
 import { logger } from "firebase-functions";
 
-export const getAllTasks = async (params: TaskQueryParam) => {
+export const getAllTasks = async (params: TaskQueryParam, origin: string) => {
   let allTasks: OriginOnFleetTask[] = [];
 
   // SECURITY FEATURE - if something broke, functions will iterate only 100 times
@@ -16,6 +16,7 @@ export const getAllTasks = async (params: TaskQueryParam) => {
    * recursively get all tasks
    * @param {TaskQueryParam} innerParams
    */
+  logger.log(`getAllTasks - start | origin: ${origin || "-"}`);
   await (async function getTasks(innerParams: TaskQueryParam) {
     const { tasks, lastId: currentLastId } = await onFleetApi.tasks.get(innerParams);
     // FIXME: investigate onFleet types, module "@onfleet/node-onfleet" has bad type coverage of onFleet api
@@ -23,7 +24,7 @@ export const getAllTasks = async (params: TaskQueryParam) => {
     // @ts-ignore
     allTasks = [...allTasks, ...tasks];
 
-    logger.log(`getAllTasks - length ${allTasks.length}, iteration: ${iteration}`);
+    logger.log(`origin: ${origin || "-"} | getAllTasks - length ${allTasks.length}, iteration: ${iteration}`);
 
     if (currentLastId && iteration <= iterationLimit ) {
       iteration++;

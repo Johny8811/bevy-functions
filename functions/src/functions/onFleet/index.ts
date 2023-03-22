@@ -21,7 +21,7 @@ export const exportTasksToDbMethod = async (
 
   try {
     const filter = tomorrowTasks();
-    const onFleetTasks = await getAllTasks(filter);
+    const onFleetTasks = await getAllTasks(filter, "exportTasksToDbMethod");
     const exportedTasksIds = onFleetTasks.map((t) => t.id);
 
     logger.log(
