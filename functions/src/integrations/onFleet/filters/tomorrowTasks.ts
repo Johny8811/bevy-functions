@@ -5,7 +5,7 @@ import { logger } from "firebase-functions";
 /**
  * Return query parameters to get tasks for tomorrow
  *
- * @param {number} initTimestamp - use, when is needed to ensure call method with specific time
+ * @param props {Object} { initTimestamp?: number } - use, when is needed to ensure call method with specific time
  *
  * @typedef {Object} Params
  * @property {number} from - Tasks created from
@@ -14,11 +14,11 @@ import { logger } from "firebase-functions";
  *
  * @return {Params}
  */
-export const tomorrowTasks = (initTimestamp?: number): Pick<
+export const tomorrowTasks = (props?: { initTimestamp?: number, origin: string }): Pick<
   TaskQueryParam,
   "from" | "completeAfterAfter" | "completeBeforeBefore"
   > => {
-  const today = set(initTimestamp || new Date(), {
+  const today = set(props?.initTimestamp || new Date(), {
     hours: 0,
     minutes: 0,
     seconds: 0,
@@ -27,7 +27,7 @@ export const tomorrowTasks = (initTimestamp?: number): Pick<
   const completeAfterAfter = getTime(add(today, { days: 1 }));
   const completeBeforeBefore = getTime(add(today, { days: 2 }));
 
-  logger.log("filterTomorrowTasks: ", {
+  logger.log(`Origin: ${origin} | filterTomorrowTasks: `, {
     createdFrom: from,
     completeAfterAfter,
     completeBeforeBefore,

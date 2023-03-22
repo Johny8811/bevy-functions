@@ -15,7 +15,7 @@ import { TaskQueryParam } from "@onfleet/node-onfleet/Resources/Tasks";
  *
  * @return {Params}
  */
-export const todayTasks = (props?: { initTimestamp: number, origin?: string }): Pick<
+export const todayTasks = (props?: { initTimestamp?: number, origin: string }): Pick<
   TaskQueryParam,
   "from" | "completeAfterAfter" | "completeBeforeBefore"
   > => {
@@ -27,7 +27,7 @@ export const todayTasks = (props?: { initTimestamp: number, origin?: string }): 
   const from = getTime(sub(today, { days: 7 }));
   const completeBeforeBefore = getTime(add(today, { days: 1 }));
 
-  logger.log(`Origin: ${origin || "-"} midnightTasksUpdate:todayTasks: `, {
+  logger.log(`Origin: ${origin || "-"} | filterTodayTasks: `, {
     createdFrom: from,
     completeAfterAfter: today,
     completeBeforeBefore,

@@ -64,7 +64,7 @@ export const findTasksByDateAndUserId = (date: string, userId: string) => {
 };
 
 export const findTomorrowTasks = () => {
-  const { completeAfterAfter, completeBeforeBefore } = tomorrowTasksFilter();
+  const { completeAfterAfter, completeBeforeBefore } = tomorrowTasksFilter({ origin: "findTomorrowTasks" });
 
   logger.log("tasksDb:findTomorrowTasks: ", { completeAfterAfter, completeBeforeBefore });
 
@@ -75,7 +75,7 @@ export const findTomorrowTasks = () => {
 };
 
 export const findTodayTasks = () => {
-  const { completeAfterAfter, completeBeforeBefore } = todayTasksFilter();
+  const { completeAfterAfter, completeBeforeBefore } = todayTasksFilter({ origin: "findTodayTasks" });
 
   logger.log("tasksDb:findTodayTasks: ", { completeAfterAfter, completeBeforeBefore });
 

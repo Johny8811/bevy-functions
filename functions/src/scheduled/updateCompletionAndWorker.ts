@@ -6,7 +6,7 @@ import { updateCompletionAndWorkerByTaskId } from "../database/tasks_db";
 
 export const updateCompletionAndWorker = async (initTimestamp: number) => {
   try {
-    const filter = todayTasks({ initTimestamp });
+    const filter = todayTasks({ initTimestamp, origin: "updateCompletionAndWorker" });
     const onFleetTasks = await getAllTasks(filter, "updateCompletionAndWorker");
     const exportedTasksIds = onFleetTasks.map((t) => t.shortId);
 

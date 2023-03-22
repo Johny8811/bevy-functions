@@ -20,7 +20,7 @@ export const exportTasksToDbMethod = async (
   logger.log("exportTasksToDbMethod - start | origin: ", origin);
 
   try {
-    const filter = tomorrowTasks();
+    const filter = tomorrowTasks({ origin: "exportTasksToDbMethod" });
     const onFleetTasks = await getAllTasks(filter, "exportTasksToDbMethod");
     const exportedTasksIds = onFleetTasks.map((t) => t.id);
 
