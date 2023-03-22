@@ -25,9 +25,9 @@ export const exportTasksToDbMethod = async (
     const exportedTasksIds = onFleetTasks.map((t) => t.id);
 
     logger.log(
+        " count: ", exportedTasksIds.length,
         "exportTasksToDbMethod - Prepared tasks ids for tomorrow: ",
-        onFleetTasks.map((t) => t.shortId),
-        " count: ", exportedTasksIds.length
+        JSON.stringify(onFleetTasks.map((t) => t.shortId))
     );
 
     if (onFleetTasks.length > 0) {
@@ -39,13 +39,13 @@ export const exportTasksToDbMethod = async (
 
       logger.log(
           " count: ", newTasks.length,
-          "exportTasksToDbMethod - new tasks ids: ",
-          newTasks.map((t) => t.shortId)
+          " | exportTasksToDbMethod - new tasks ids: ",
+          JSON.stringify(newTasks.map((t) => t.shortId))
       );
       logger.log(
           " count: ", updatedTasks.length,
-          "exportTasksToDbMethod - updated tasks ids: ",
-          updatedTasks.map((t) => t.shortId)
+          " | exportTasksToDbMethod - updated tasks ids: ",
+          JSON.stringify(updatedTasks.map((t) => t.shortId))
       );
 
       if (newTasks.length > 0) {
@@ -79,7 +79,7 @@ export const exportTasksToDb = withCors(withAuthorization(async (req, res) => {
       },
       (e) => {
         res.status(500).json({ message: (e as Error).message });
-      }, "\"onFleet - export tasks\" - BUTTON");
+      }, "'onFleet - export tasks' - BUTTON");
 }));
 
 /**
