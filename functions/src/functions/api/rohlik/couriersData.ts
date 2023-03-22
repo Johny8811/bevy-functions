@@ -25,10 +25,12 @@ export const couriersData = withCors(withApiAuthorization(async (req, res) => {
     const dateNow = new Date();
     const monthSet = month && setMonth(setDate(dateNow, 1), month - 1);
 
+    // TODO: use util to format date
     const startDate = format(
       monthSet ? monthSet : subDays(dateNow, 1),
       "yyyy-MM-dd"
     );
+    // TODO: use util to format date
     const endDate = format(
       monthSet ? addMonths(monthSet, 1) : dateNow,
       "yyyy-MM-dd"
