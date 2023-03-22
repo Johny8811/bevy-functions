@@ -2,10 +2,12 @@ import { add, sub, getTime, set } from "date-fns";
 import { TaskQueryParam } from "@onfleet/node-onfleet/Resources/Tasks";
 import { logger } from "firebase-functions";
 
+// @param props {Object} { initTimestamp?: number } - use, when is needed to ensure call method with specific time
+// eslint-disable-next-line valid-jsdoc
 /**
  * Return query parameters to get tasks for tomorrow
  *
- * @param props {Object} { initTimestamp?: number } - use, when is needed to ensure call method with specific time
+ *
  *
  * @typedef {Object} Params
  * @property {number} from - Tasks created from

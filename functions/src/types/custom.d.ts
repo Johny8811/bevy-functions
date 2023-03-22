@@ -13,7 +13,7 @@ type User = {
   email_verified?: boolean,
   firebase: {
     identities: {
-      [key: string]: any;
+      [key: string]: unknown;
     },
     sign_in_provider: string
   },
