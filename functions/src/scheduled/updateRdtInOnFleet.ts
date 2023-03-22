@@ -27,7 +27,7 @@ export const updateRdtInOnFleet = async (initTimestamp: number) => {
       })
     ));
 
-    logger.log("updateRdtInOnFleet: updated RDT by slot - tasks IDs: ", result.map((v) => v.shortId));
+    logger.log("updateRdtInOnFleet: updated RDT by slot - tasks IDs: ", JSON.stringify(result.map((v) => v.shortId)));
   } catch (e) {
     logger.log("updateRdtInOnFleet:Error:  ", e);
   }
