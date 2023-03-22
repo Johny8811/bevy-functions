@@ -6,11 +6,11 @@ import { exportTasksToDbMethod } from "../functions/onFleet";
 export const midnightExportTasksToDb = functions
     .region("europe-west3")
     .pubsub
-    .schedule("58 23 * * *")
+    .schedule("45 23 * * *")
     .timeZone("Europe/Prague")
-    .onRun(async () => {
+    .onRun(async (context) => {
       try {
-        logger.log("exportTasksToDb:JOB - start");
+        logger.log("exportTasksToDb:JOB - start: ", context.timestamp);
 
         await exportTasksToDbMethod((tasks) => {
           logger.log("exportTasksToDb:JOB - tasks: ", tasks);
