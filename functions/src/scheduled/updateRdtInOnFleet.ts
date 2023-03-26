@@ -13,7 +13,7 @@ export const updateRdtInOnFleet = async (initTimestamp: number) => {
     const exportedTasksIds = onFleetTasks.map((t) => t.id);
 
     logger.log(
-        "updateRdtInOnFleet:exportedTasksIds: ",
+        "updateRdtInOnFleet:onFleetTasksIds: ",
         JSON.stringify(onFleetTasks.map((t) => t.shortId))
     );
 

@@ -14,6 +14,7 @@ type Result = {
 };
 
 // TODO: test
+// TODO: redundant REMOVE
 export const filterOnFleetExportByDbTasks = (ourOnFleetTasks: OurOnFleetTask[], databaseTasks: OurOnFleetTask[]) =>
   ourOnFleetTasks.reduce<Result>((total, onFleetTask) => {
     const dbFoundTask = databaseTasks.find((t) => t.id === onFleetTask.id);
