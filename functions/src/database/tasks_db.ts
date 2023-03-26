@@ -6,6 +6,7 @@ import { tomorrowTasks as tomorrowTasksFilter } from "../integrations/onFleet/fi
 import { todayTasks as todayTasksFilter } from "../integrations/onFleet/filters/todayTasks";
 import { yesterdayTasks as yesterdayTasksFilter } from "../integrations/onFleet/filters/yesterdayTasks";
 import { client } from "../integrations/mongodb";
+import { TaskQueryParam } from "@onfleet/node-onfleet/Resources/Tasks";
 
 const tasksCollection = client
     .db("on_fleet")
@@ -16,14 +17,18 @@ export const insertTasks = (tasks: OurOnFleetTask[]) => tasksCollection.insertMa
     { ordered: true }
 );
 
-export const updateTask = (task: OurOnFleetTask) => tasksCollection.updateOne(
-    { id: task.id },
-    {
-      $set: {
-        ...task,
-      },
-    },
-);
+export const deleteTasks = (filter: TaskQueryParam) =>
+  tasksCollection
+      .deleteMany(
+          {
+            completeAfter: {
+              $gt: filter.completeAfterAfter,
+            },
+            completeBefore: {
+              $lt: filter.completeBeforeBefore,
+            },
+          }
+      );
 
 export const findTasksByIDs = (ids: string[]) => tasksCollection
     .find({

@@ -7,10 +7,9 @@ import { tomorrowTasks } from "../../integrations/onFleet/filters/tomorrowTasks"
 import { getAllTasks } from "../../integrations/onFleet/getAllTasks";
 
 import { generateOrderForTasks } from "../utils/generateTaskOrder";
-import { filterOnFleetExportByDbTasks } from "../utils/filterOnFleetExportByDbTasks";
 import { formatToDateAndTime } from "../../utils/formatDates";
 import { generateHourlyTimeSlot } from "../utils/generateHourlyTimeSlot";
-import { findTasksByIDs, insertTasks, updateTask } from "../../database/tasks_db";
+import { insertTasks, deleteTasks as deletePreviouslyImportedTasks } from "../../database/tasks_db";
 import { OurOnFleetTask } from "../../types/tasks";
 
 export const exportTasksToDbMethod = async (
@@ -23,50 +22,32 @@ export const exportTasksToDbMethod = async (
   try {
     const filter = tomorrowTasks({ origin: `${origin} -> exportTasksToDbMethod` });
     const onFleetTasks = await getAllTasks(filter, `${origin} -> exportTasksToDbMethod`);
-    const exportedTasksIds = onFleetTasks.map((t) => t.id);
 
     logger.log(
-        " count: ", exportedTasksIds.length,
+        " count: ", onFleetTasks.length,
         "exportTasksToDbMethod - Prepared tasks ids for tomorrow: ",
         JSON.stringify(onFleetTasks.map((t) => t.shortId))
     );
 
     if (onFleetTasks.length > 0) {
-      const databaseTasks = await findTasksByIDs(exportedTasksIds);
+      await deletePreviouslyImportedTasks(filter);
+
       const tasksWithOrder = generateOrderForTasks(onFleetTasks);
       const ourOnFleetTasks = tasksWithOrder.map((t) => ({ ...t, slot: generateHourlyTimeSlot(t) }));
 
-      const { newTasks, updatedTasks } = filterOnFleetExportByDbTasks(ourOnFleetTasks, databaseTasks);
-
       logger.log(
-          " count: ", newTasks.length,
           " | exportTasksToDbMethod - new tasks ids: ",
-          JSON.stringify(newTasks.map((t) => t.shortId))
+          JSON.stringify(ourOnFleetTasks.map((t) => t.shortId))
       );
-      logger.log(
-          " count: ", updatedTasks.length,
-          " | exportTasksToDbMethod - updated tasks ids: ",
-          JSON.stringify(updatedTasks.map((t) => t.shortId))
-      );
-
-      logger.log("exportTasksToDbMethod - NEW TASKS slots & ECT: ", JSON.stringify(newTasks.map((t) => ({
+      logger.log("exportTasksToDbMethod - NEW TASKS slots & ECT: ", JSON.stringify(ourOnFleetTasks.map((t) => ({
         shortId: t.shortId,
         estimatedCompletionTime: t.estimatedCompletionTime,
         start: t.slot?.start && formatToDateAndTime(t.slot?.start),
         end: t.slot?.end && formatToDateAndTime(t.slot?.end),
       }))));
-      if (newTasks.length > 0) {
-        await insertTasks(newTasks);
-      }
 
-      logger.log("exportTasksToDbMethod - UPDATED TASKS slots & ECT: ", JSON.stringify(updatedTasks.map((t) => ({
-        shortId: t.shortId,
-        estimatedCompletionTime: t.estimatedCompletionTime,
-        start: t.slot?.start && formatToDateAndTime(t.slot?.start),
-        end: t.slot?.end && formatToDateAndTime(t.slot?.end),
-      }))));
-      if (updatedTasks.length > 0) {
-        await Promise.all(updatedTasks.map((task) => updateTask(task)));
+      if (ourOnFleetTasks.length > 0) {
+        await insertTasks(ourOnFleetTasks);
       }
 
       successCb(ourOnFleetTasks);
