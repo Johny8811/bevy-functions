@@ -17,7 +17,7 @@ export const insertTasks = (tasks: OurOnFleetTask[]) => tasksCollection.insertMa
     { ordered: true }
 );
 
-export const deleteTasks = (filter: TaskQueryParam) =>
+export const deletePreviouslyImportedTasks = (filter: TaskQueryParam) =>
   tasksCollection
       .deleteMany(
           {

@@ -9,7 +9,7 @@ import { getAllTasks } from "../../integrations/onFleet/getAllTasks";
 import { generateOrderForTasks } from "../utils/generateTaskOrder";
 import { formatToDateAndTime } from "../../utils/formatDates";
 import { generateHourlyTimeSlot } from "../utils/generateHourlyTimeSlot";
-import { insertTasks, deleteTasks as deletePreviouslyImportedTasks } from "../../database/tasks_db";
+import { insertTasks, deletePreviouslyImportedTasks } from "../../database/tasks_db";
 import { OurOnFleetTask } from "../../types/tasks";
 
 export const exportTasksToDbMethod = async (
