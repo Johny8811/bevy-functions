@@ -1,4 +1,4 @@
-import { groupBy } from "lodash";
+import { groupBy, isNil } from "lodash";
 import { logger } from "firebase-functions";
 
 import { OriginOnFleetTask, TaskMetadata } from "../../types/tasks";
@@ -48,13 +48,16 @@ export const generateOrderForTasks = (onFleetTasks: OriginOnFleetTask[]) => {
     const { worker } = onFleetTask;
 
     if (userId && worker) {
+      logger.log("generateOrderForTasks:userId && worker ", { userId, worker });
+
       const workersTasksMap = groupedByUserAndWorker[userId];
       const workerTasks = workersTasksMap && workersTasksMap[worker];
       const taskIndex = workerTasks?.findIndex((t) => t.id === onFleetTask.id);
+      logger.log("generateOrderForTasks:taskIndex ", { taskIndex });
 
       return addOrderField(
           onFleetTask,
-          taskIndex ? taskIndex + 1 : null,
+        isNil(taskIndex) ? null : taskIndex + 1,
       );
     }
 
