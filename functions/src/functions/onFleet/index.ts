@@ -36,10 +36,10 @@ export const exportTasksToDbMethod = async (
       const ourOnFleetTasks = tasksWithOrder.map((t) => ({ ...t, slot: generateHourlyTimeSlot(t) }));
 
       logger.log(
-          " | exportTasksToDbMethod - new tasks ids: ",
+          " | exportTasksToDbMethod - ourOnFleetTasks ids: ",
           JSON.stringify(ourOnFleetTasks.map((t) => t.shortId))
       );
-      logger.log("exportTasksToDbMethod - NEW TASKS slots & ECT: ", JSON.stringify(ourOnFleetTasks.map((t) => ({
+      logger.log("exportTasksToDbMethod - ourOnFleetTasks - slots & ECT: ", JSON.stringify(ourOnFleetTasks.map((t) => ({
         shortId: t.shortId,
         estimatedCompletionTime: t.estimatedCompletionTime,
         start: t.slot?.start && formatToDateAndTime(t.slot?.start),
