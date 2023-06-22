@@ -20,14 +20,22 @@ export const updateRdtInOnFleet = async (initTimestamp: number) => {
     const databaseTasks = await findTasksByIDs(exportedTasksIds);
     logger.log("updateRdtInOnFleet: databaseTasks: ", databaseTasks.map((v) => v.shortId));
 
-    const result = await Promise.all(databaseTasks.map((task) =>
-      onFleetApi.tasks.update(task.id, {
-        completeAfter: task.slot?.start,
-        completeBefore: task.slot?.end,
-      })
-    ));
+    databaseTasks.forEach((task) => {
+      void onFleetApi
+          .tasks
+          .update(task.id, {
+            completeAfter: task.slot?.start,
+            completeBefore: task.slot?.end,
+          })
+          .then(() => {
+            logger.log(`Success update: ${task.id} `);
+          })
+          .catch(() => {
+            logger.log(`Success FAILED: ${task.id} `);
+          });
 
-    logger.log("updateRdtInOnFleet: updated RDT by slot - tasks IDs: ", JSON.stringify(result.map((v) => v.shortId)));
+      return task.shortId;
+    });
   } catch (e) {
     logger.log("updateRdtInOnFleet:Error:  ", e);
   }

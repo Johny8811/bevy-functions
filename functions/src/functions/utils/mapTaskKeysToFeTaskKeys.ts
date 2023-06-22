@@ -2,7 +2,8 @@ import { OurOnFleetTask } from "../../types/tasks";
 
 export const mapTaskKeysToFeTaskKeys = (tasks: OurOnFleetTask[]) => tasks.map(({
   id,
-  shortId, recipients,
+  shortId,
+  recipients,
   destination,
   estimatedCompletionTime,
   order,
@@ -14,7 +15,8 @@ export const mapTaskKeysToFeTaskKeys = (tasks: OurOnFleetTask[]) => tasks.map(({
   worker,
 }) => ({
   id,
-  shortId, recipients,
+  shortId,
+  recipients,
   destination,
   estimatedCompletionTime,
   order,
