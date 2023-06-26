@@ -18,7 +18,8 @@ export const updateRdtInOnFleet = async (initTimestamp: number) => {
     );
 
     const databaseTasks = await findTasksByIDs(exportedTasksIds);
-    logger.log("updateRdtInOnFleet: databaseTasks: ", databaseTasks.map((v) => v.shortId));
+    logger.log("updateRdtInOnFleet: databaseTasks - ids: ", exportedTasksIds);
+    logger.log("updateRdtInOnFleet: databaseTasks - shortIds: ", databaseTasks.map((v) => v.shortId));
 
     databaseTasks.forEach((task) => {
       void onFleetApi
