@@ -3,3 +3,5 @@
 1. ```npm install -g firebase-tools```
 2. ```npm install firebase-functions@latest firebase-admin@latest --save```
 3. run ```npm emulator:start``` for start loval develpment
+
+To deploy functions to firebase ```firebase deploy --only functions```
